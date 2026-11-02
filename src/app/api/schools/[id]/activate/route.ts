@@ -1,0 +1,37 @@
+// src/app/api/schools/[id]/activate/route.ts
+import { NextRequest, NextResponse } from "next/server";
+import { db } from "@/lib/db";
+import { getSession } from "@/lib/auth";
+
+export async function POST(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const user = await getSession();
+  if (!user || user.role !== "SUPER_ADMIN") {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    const { id } = await params;
+    const school = await db.school.update({
+      where: { id },
+      data: { status: "active" },
+    });
+
+    await db.auditLog.create({
+      data: {
+        userId: user.id,
+        schoolId: school.id,
+        action: "school.activate",
+        entity: "school",
+        entityId: school.id,
+      },
+    });
+
+    return NextResponse.json({ ok: true, school });
+  } catch (err) {
+    console.error("[school/activate] error:", err);
+    return NextResponse.json({ error: "Failed to activate school" }, { status: 500 });
+  }
+}

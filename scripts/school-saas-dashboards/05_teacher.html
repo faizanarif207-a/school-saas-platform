@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<title>Teacher Dashboard — School SaaS</title>
+<style>/* Shared CSS for all role dashboards */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #F1F5F9;
+  padding: 40px;
+  color: #243447;
+}
+.canvas { width: 1500px; background: #F1F5F9; }
+.layout { display: flex; gap: 20px; align-items: flex-start; }
+.browser-wrap { flex: 0 0 1180px; }
+.annot-panel {
+  flex: 1;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 12px;
+  padding: 16px 14px;
+}
+.annot-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1E293B;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #F1F5F9;
+}
+.annot-item { margin-bottom: 11px; }
+.annot-num {
+  display: inline-flex;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--accent, #4C6EF5);
+  color: #FFFFFF;
+  font-size: 10px;
+  font-weight: 700;
+  align-items: center;
+  justify-content: center;
+  margin-right: 6px;
+}
+.annot-label { font-size: 11px; font-weight: 600; color: #1E293B; }
+.annot-desc {
+  font-size: 10.5px;
+  color: #64748B;
+  line-height: 1.45;
+  margin-top: 3px;
+  padding-left: 24px;
+}
+
+.header { text-align: center; margin-bottom: 24px; }
+.header h1 { font-size: 24px; font-weight: 700; color: #243447; letter-spacing: -0.4px; }
+.header p { font-size: 13px; color: #64748B; margin-top: 4px; }
+
+.browser {
+  background: #FFFFFF;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+  border: 1px solid #E2E8F0;
+}
+.browser-bar {
+  background: #F8FAFC;
+  padding: 8px 14px;
+  border-bottom: 1px solid #E2E8F0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.dot { width: 9px; height: 9px; border-radius: 50%; }
+.dot.red { background: #EF4444; }
+.dot.yellow { background: #F59E0B; }
+.dot.green { background: #10B981; }
+.url-bar {
+  flex: 1;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 5px;
+  padding: 4px 10px;
+  font-size: 10.5px;
+  color: #64748B;
+  margin-left: 10px;
+  font-family: 'SF Mono', Menlo, monospace;
+}
+.browser-body {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  min-height: 680px;
+}
+
+/* Sidebar */
+.sidebar {
+  background: var(--sidebar, #0F172A);
+  color: #E2E8F0;
+  padding: 18px 0;
+}
+.logo {
+  padding: 0 18px 18px 18px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  margin-bottom: 14px;
+}
+.logo-text { font-size: 13px; font-weight: 700; color: #FFFFFF; }
+.logo-sub { font-size: 10px; color: #64748B; margin-top: 2px; }
+.nav-section { padding: 0 12px; margin-bottom: 16px; }
+.nav-label {
+  font-size: 9px;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 1.1px;
+  padding: 0 8px 6px 8px;
+  font-weight: 600;
+}
+.nav-item {
+  padding: 8px 11px;
+  border-radius: 6px;
+  font-size: 11.5px;
+  color: #94A3B8;
+  margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+.nav-item.active {
+  background: var(--accent, #4C6EF5);
+  color: #FFFFFF;
+  font-weight: 600;
+}
+.nav-icon { width: 13px; text-align: center; font-size: 11px; }
+.nav-badge {
+  margin-left: auto;
+  background: #EF4444;
+  color: #FFFFFF;
+  font-size: 9px;
+  padding: 1px 6px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+.nav-count {
+  margin-left: auto;
+  font-size: 10px;
+  color: #64748B;
+}
+
+/* Main */
+.main { padding: 20px 22px; background: #F8FAFC; }
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.page-title h2 { font-size: 16px; font-weight: 700; color: #1E293B; }
+.breadcrumb { font-size: 10.5px; color: #64748B; margin-top: 2px; }
+.topbar-actions { display: flex; gap: 8px; align-items: center; }
+.btn {
+  padding: 6px 12px;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 500;
+  border: 1px solid #E2E8F0;
+  background: #FFFFFF;
+  color: #334155;
+}
+.btn-primary {
+  background: var(--accent, #4C6EF5);
+  color: #FFFFFF;
+  border-color: var(--accent, #4C6EF5);
+}
+.avatar {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: var(--accent, #4C6EF5);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  margin-left: 6px;
+}
+
+/* KPI cards */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.stat-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 7px;
+  padding: 12px 14px;
+}
+.stat-label {
+  font-size: 9.5px;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+.stat-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1E293B;
+  letter-spacing: -0.4px;
+}
+.stat-delta {
+  font-size: 10px;
+  margin-top: 3px;
+}
+.stat-delta.up { color: #10B981; }
+.stat-delta.down { color: #EF4444; }
+.stat-delta.warn { color: #B45309; }
+
+/* Panel */
+.panel-card {
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  margin-bottom: 14px;
+  overflow: hidden;
+}
+.panel-header {
+  padding: 11px 14px;
+  border-bottom: 1px solid #F1F5F9;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.panel-title { font-size: 12px; font-weight: 600; color: #1E293B; }
+.panel-link { font-size: 10.5px; color: var(--accent, #4C6EF5); font-weight: 500; }
+
+table { width: 100%; border-collapse: collapse; }
+th {
+  text-align: left;
+  padding: 8px 14px;
+  background: #F8FAFC;
+  font-size: 9.5px;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  border-bottom: 1px solid #E2E8F0;
+}
+td {
+  padding: 9px 14px;
+  font-size: 11px;
+  color: #334155;
+  border-bottom: 1px solid #F1F5F9;
+}
+tr:last-child td { border-bottom: none; }
+
+.status-pill {
+  display: inline-block;
+  font-size: 9.5px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+}
+.pill-active { background: #D1FAE5; color: #065F46; }
+.pill-trial { background: #DBEAFE; color: #1E40AF; }
+.pill-suspended { background: #FEE2E2; color: #991B1B; }
+.pill-pending { background: #FEF3C7; color: #92400E; }
+.pill-paid { background: #D1FAE5; color: #065F46; }
+.pill-overdue { background: #FEE2E2; color: #991B1B; }
+
+.row-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 14px; }
+.row-grid-1-1 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+.bar { margin-bottom: 10px; }
+.bar-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10.5px;
+  margin-bottom: 3px;
+}
+.bar-track { background: #F1F5F9; height: 7px; border-radius: 4px; overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 4px; background: var(--accent, #4C6EF5); }
+
+.section-row { padding: 14px; }
+
+.canvas { width: 1500px; }
+.browser-body { min-height: 660px; }
+</style>
+</head><body style="--accent: #0891B2; --sidebar: #0F172A;">
+<div class="canvas">
+  <div class="header">
+    <h1>Teacher Dashboard — School SaaS</h1>
+    <p>Teacher — daily classroom operations: attendance & marks</p>
+  </div>
+  <div class="layout">
+    <div class="browser-wrap">
+      <div class="browser">
+        <div class="browser-bar">
+          <div class="dot red"></div><div class="dot yellow"></div><div class="dot green"></div>
+          <div class="url-bar">https://platform.yourschoolsaas.pk/school/teacher/dashboard</div>
+        </div>
+        <div class="browser-body">
+          <div class="sidebar">
+            <div class="logo">
+              <div class="logo-text">SchoolSaaS</div>
+              <div class="logo-sub">Teacher</div>
+            </div>
+            <div class="nav-section"><div class="nav-label">My Classes</div><div class="nav-item active"><span class="nav-icon">▣</span><span>Dashboard</span></div><div class="nav-item"><span class="nav-icon">📅</span><span>My Timetable</span></div><div class="nav-item"><span class="nav-icon">🎓</span><span>My Students</span><span class="nav-count">128</span></div></div><div class="nav-section"><div class="nav-label">Daily Tasks</div><div class="nav-item"><span class="nav-icon">✓</span><span>Mark Attendance</span><span class="nav-badge">2</span></div><div class="nav-item"><span class="nav-icon">✏</span><span>Enter Marks</span><span class="nav-badge">1</span></div><div class="nav-item"><span class="nav-icon">📓</span><span>Homework</span></div></div><div class="nav-section"><div class="nav-label">Records</div><div class="nav-item"><span class="nav-icon">🕐</span><span>My Attendance</span></div><div class="nav-item"><span class="nav-icon">📋</span><span>Lesson Plans</span></div><div class="nav-item"><span class="nav-icon">💬</span><span>Student Notes</span></div></div>
+          </div>
+          <div class="main">
+            <div class="topbar">
+              <div class="page-title">
+                <h2>School SaaS</h2>
+                <div class="breadcrumb">Home &rsaquo; Dashboard</div>
+              </div>
+              <div class="topbar-actions">
+                <button class="btn">Export</button>
+                <button class="btn btn-primary">Mark Today's Attendance</button>
+                <div class="avatar">TE</div>
+              </div>
+            </div>
+            <div class="stats">
+        <div class="stat-card"><div class="stat-label">My Classes</div><div class="stat-value">4</div><div class="stat-delta">Class 5, 6, 7, 8</div></div>
+        <div class="stat-card"><div class="stat-label">Students Taught</div><div class="stat-value">128</div><div class="stat-delta">across all sections</div></div>
+        <div class="stat-card"><div class="stat-label">Attendance Pending</div><div class="stat-value">2</div><div class="stat-delta warn">Class 7-A · 8-B</div></div>
+        <div class="stat-card"><div class="stat-label">Marks Pending</div><div class="stat-value">1</div><div class="stat-delta warn">Class 5 mid-term</div></div>
+    </div>
+            <div class="panel-card">
+      <div class="panel-header"><div class="panel-title">Today's Timetable — Wednesday</div><a class="panel-link">Full week →</a></div>
+      <table><thead><tr><th>Period</th><th>Time</th><th>Class</th><th>Section</th><th>Subject</th><th>Room</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>08:00 – 08:45</td><td>Class 5</td><td>A</td><td>Mathematics</td><td>R-12</td><td><span class="status-pill pill-active">Done</span></td></tr>
+        <tr><td>2</td><td>08:50 – 09:35</td><td>Class 6</td><td>B</td><td>Mathematics</td><td>R-15</td><td><span class="status-pill pill-active">Done</span></td></tr>
+        <tr><td>3</td><td>09:40 – 10:25</td><td>Class 7</td><td>A</td><td>Mathematics</td><td>R-09</td><td><span class="status-pill pill-pending">Now</span></td></tr>
+        <tr><td>4</td><td>10:30 – 11:15</td><td>—</td><td>—</td><td>Free Period</td><td>—</td><td>—</td></tr>
+        <tr><td>5</td><td>11:20 – 12:05</td><td>Class 8</td><td>B</td><td>Mathematics</td><td>R-18</td><td><span class="status-pill pill-pending">Upcoming</span></td></tr>
+      </tbody></table>
+    </div>
+    <div class="row-grid">
+      <div class="panel-card">
+        <div class="panel-header"><div class="panel-title">Pending Tasks</div></div>
+        <table><thead><tr><th>Task</th><th>Class</th><th>Due</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td>Mark attendance</td><td>7-A</td><td>Today · 10:25</td><td><span style="color:#0891B2;font-weight:600;">Open</span></td></tr>
+          <tr><td>Mark attendance</td><td>8-B</td><td>Today · 12:05</td><td><span style="color:#0891B2;font-weight:600;">Open</span></td></tr>
+          <tr><td>Enter mid-term marks</td><td>5-A (52 students)</td><td>Friday EOD</td><td><span style="color:#0891B2;font-weight:600;">Start</span></td></tr>
+        </tbody></table>
+      </div>
+      <div class="panel-card">
+        <div class="panel-header"><div class="panel-title">My Students — Class 7-A</div></div>
+        <div class="section-row" style="font-size:11px;color:#475569;line-height:1.6;">
+          <strong style="color:#1E293B;">32 students</strong> · 18 boys, 14 girls<br><br>
+          <strong>Avg attendance (month):</strong> 89%<br>
+          <strong>Avg mid-term result:</strong> 76%<br>
+          <strong>Needs attention:</strong> 4 students<br>
+          <strong>Top performer:</strong> Ahmed Raza (94%)
+          <div style="margin-top:12px;padding:8px 10px;background:#E0F2FE;border-radius:5px;color:#0369A1;font-size:10.5px;line-height:1.4;">
+            4 students below 70% attendance. Send note to parents?
+          </div>
+        </div>
+      </div>
+    </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="annot-panel">
+      <div class="annot-title">Wireframe Guide</div>
+      <div class="annot-item"><span class="annot-num">1</span><span class="annot-label">Sidebar</span><div class="annot-desc">Teacher-scoped. Sees only own classes, own students, own attendance. Cannot view other teachers' data.</div></div><div class="annot-item"><span class="annot-num">2</span><span class="annot-label">KPI cards</span><div class="annot-desc">Today's workload: classes, students, attendance/marks pending — the two daily tasks.</div></div><div class="annot-item"><span class="annot-num">3</span><span class="annot-label">Today's timetable</span><div class="annot-desc">Period-by-period schedule. 'Now' pill shows current class. Free periods shown.</div></div><div class="annot-item"><span class="annot-num">4</span><span class="annot-label">Pending tasks</span><div class="annot-desc">Smart to-do. Reminds teacher what to mark/enter before day ends. Auto-shared with principal.</div></div><div class="annot-item"><span class="annot-num">5</span><span class="annot-label">My students view</span><div class="annot-desc">Per-class snapshot. Flags students needing attention so teacher can act fast.</div></div>
+    </div>
+  </div>
+</div>
+</body></html>

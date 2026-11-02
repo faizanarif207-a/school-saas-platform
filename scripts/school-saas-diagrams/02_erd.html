@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>School SaaS — Database ERD</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #FFFFFF;
+    padding: 40px;
+    color: #243447;
+  }
+  .canvas { width: 1500px; background: #FFFFFF; }
+  .header { text-align: center; margin-bottom: 28px; }
+  .header h1 { font-size: 28px; font-weight: 700; color: #243447; letter-spacing: -0.4px; }
+  .header p { font-size: 14px; color: #64748B; margin-top: 6px; }
+
+  .legend {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    margin-bottom: 24px;
+    font-size: 12px;
+    color: #64748B;
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-swatch { width: 14px; height: 14px; border-radius: 3px; }
+
+  .erd-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px 28px;
+  }
+  .table {
+    background: #FFFFFF;
+    border: 1.5px solid #CBD5E1;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .table-header {
+    padding: 10px 14px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #FFFFFF;
+    letter-spacing: 0.3px;
+  }
+  .table-body {
+    padding: 0;
+  }
+  .field {
+    padding: 7px 14px;
+    font-size: 11.5px;
+    color: #334155;
+    border-bottom: 1px solid #F1F5F9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .field:last-child { border-bottom: none; }
+  .field-name { font-weight: 500; }
+  .field-type { color: #94A3B8; font-size: 10px; font-family: 'SF Mono', Menlo, monospace; }
+  .pk { color: #DC2626; font-weight: 700; margin-right: 4px; }
+  .fk { color: #2563EB; font-weight: 700; margin-right: 4px; }
+
+  /* Color groups */
+  .platform { border-color: #4C6EF5; }
+  .platform .table-header { background: #4C6EF5; }
+  .core { border-color: #0F766E; }
+  .core .table-header { background: #0F766E; }
+  .academic { border-color: #B45309; }
+  .academic .table-header { background: #B45309; }
+  .billing { border-color: #7C3AED; }
+  .billing .table-header { background: #7C3AED; }
+  .system { border-color: #475569; }
+  .system .table-header { background: #475569; }
+
+  .group-label {
+    grid-column: 1 / -1;
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748B;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 8px 0 4px 0;
+    border-bottom: 1px solid #E2E8F0;
+    margin-bottom: 4px;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="header">
+    <h1>School SaaS — Database Schema (ERD)</h1>
+    <p>Core tables grouped by function. Every school-scoped table carries <code style="background:#F1F5F9;padding:2px 6px;border-radius:4px;">school_id</code> for tenant isolation.</p>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><span class="legend-swatch" style="background:#4C6EF5;"></span> Platform (Super Admin)</div>
+    <div class="legend-item"><span class="legend-swatch" style="background:#0F766E;"></span> Core Student</div>
+    <div class="legend-item"><span class="legend-swatch" style="background:#B45309;"></span> Academic</div>
+    <div class="legend-item"><span class="legend-swatch" style="background:#7C3AED;"></span> Fees &amp; Billing</div>
+    <div class="legend-item"><span class="legend-swatch" style="background:#475569;"></span> Users &amp; System</div>
+    <div class="legend-item"><span style="color:#DC2626;font-weight:700;">PK</span> = Primary Key &nbsp; <span style="color:#2563EB;font-weight:700;">FK</span> = Foreign Key</div>
+  </div>
+
+  <div class="erd-grid">
+    <!-- PLATFORM GROUP -->
+    <div class="group-label">Platform Level (controlled by Super Admin)</div>
+    <div class="table platform">
+      <div class="table-header">platform_plans</div>
+      <div class="table-body">
+        <div class="field"><span><span class="pk">PK</span>id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span>name</span><span class="field-type">varchar</span></div>
+        <div class="field"><span>monthly_price</span><span class="field-type">numeric</span></div>
+        <div class="field"><span>student_limit</span><span class="field-type">int</span></div>
+        <div class="field"><span>features</span><span class="field-type">jsonb</span></div>
+      </div>
+    </div>
+    <div class="table platform">
+      <div class="table-header">schools</div>
+      <div class="table-body">
+        <div class="field"><span><span class="pk">PK</span>id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span>name</span><span class="field-type">varchar</span></div>
+        <div class="field"><span>city</span><span class="field-type">varchar</span></div>
+        <div class="field"><span><span class="fk">FK</span>plan_id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span>status</span><span class="field-type">enum</span></div>
+        <div class="field"><span>created_at</span><span class="field-type">timestamp</span></div>
+      </div>
+    </div>
+    <div class="table platform">
+      <div class="table-header">subscriptions</div>
+      <div class="table-body">
+        <div class="field"><span><span class="pk">PK</span>id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span><span class="fk">FK</span>school_id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span><span class="fk">FK</span>plan_id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span>start_date</span><span class="field-type">date</span></div>
+        <div class="field"><span>end_date</span><span class="field-type">date</span></div>
+        <div class="field"><span>status</span><span class="field-type">enum</span></div>
+      </div>
+    </div>
+    <div class="table platform">
+      <div class="table-header">audit_logs</div>
+      <div class="table-body">
+        <div class="field"><span><span class="pk">PK</span>id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span><span class="fk">FK</span>user_id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span><span class="fk">FK</span>school_id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span>action</span><span class="field-type">varchar</span></div>
+        <div class="field"><span>created_at</span><span class="field-type">timestamp</span></div>
+      </div>
+    </div>
+
+    <!-- CORE STUDENT GROUP -->
+    <div class="group-label">Core Student &amp; Structure (per School)</div>
+    <div class="table core">
+      <div class="table-header">campuses</div>
+      <div class="table-body">
+        <div class="field"><span><span class="pk">PK</span>id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span><span class="fk">FK</span>school_id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span>name</span><span class="field-type">varchar</span></div>
+        <div class="field"><span>address</span><span class="field-type">varchar</span></div>
+      </div>
+    </div>
+    <div class="table core">
+      <div class="table-header">academic_years</div>
+      <div class="table-body">
+        <div class="field"><span><span class="pk">PK</span>id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span><span class="fk">FK</span>school_id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span>year</span><span class="field-type">varchar</span></div>
+        <div class="field"><span>start_date</span><span class="field-type">date</span></div>
+        <div class="field"><span>end_date</span><span class="field-type">date</span></div>
+      </div>
+    </div>
+    <div class="table core">
+      <div class="table-header">classes</div>
+      <div class="table-body">
+        <div class="field"><span><span class="pk">PK</span>id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span><span class="fk">FK</span>school_id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span><span class="fk">FK</span>campus_id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span>name</span><span class="field-type">varchar</span></div>
+      </div>
+    </div>
+    <div class="table core">
+      <div class="table-header">sections</div>
+      <div class="table-body">
+        <div class="field"><span><span class="pk">PK</span>id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span><span class="fk">FK</span>class_id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span>name</span><span class="field-type">varchar</span></div>
+        <div class="field"><span>capacity</span><span class="field-type">int</span></div>
+      </div>
+    </div>
+    <div class="table core">
+      <div class="table-header">students</div>
+      <div class="table-body">
+        <div class="field"><span><span class="pk">PK</span>id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span><span class="fk">FK</span>school_id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span>name</span><span class="field-type">varchar</span></div>
+        <div class="field"><span>father_name</span><span class="field-type">varchar</span></div>
+        <div class="field"><span>dob</span><span class="field-type">date</span></div>
+        <div class="field"><span>gender</span><span class="field-type">enum</span></div>
+        <div class="field"><span>status</span><span class="field-type">enum</span></div>
+      </div>
+    </div>
+    <div class="table core">
+      <div class="table-header">enrollments</div>
+      <div class="table-body">
+        <div class="field"><span><span class="pk">PK</span>id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span><span class="fk">FK</span>student_id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span><span class="fk">FK</span>academic_year_id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span><span class="fk">FK</span>section_id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span>roll_no</span><span class="field-type">int</span></div>
+      </div>
+    </div>
+    <div class="table core">
+      <div class="table-header">guardians</div>
+      <div class="table-body">
+        <div class="field"><span><span class="pk">PK</span>id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span><span class="fk">FK</span>student_id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span>name</span><span class="field-type">varchar</span></div>
+        <div class="field"><span>phone</span><span class="field-type">varchar</span></div>
+        <div class="field"><span>relation</span><span class="field-type">varchar</span></div>
+      </div>
+    </div>
+
+    <!-- ACADEMIC GROUP -->
+    <div class="group-label">Academic — Attendance, Exams, Results</div>
+    <div class="table academic">
+      <div class="table-header">subjects</div>
+      <div class="table-body">
+        <div class="field"><span><span class="pk">PK</span>id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span><span class="fk">FK</span>school_id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span>name</span><span class="field-type">varchar</span></div>
+        <div class="field"><span>code</span><span class="field-type">varchar</span></div>
+      </div>
+    </div>
+    <div class="table academic">
+      <div class="table-header">attendance</div>
+      <div class="table-body">
+        <div class="field"><span><span class="pk">PK</span>id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span><span class="fk">FK</span>enrollment_id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span>date</span><span class="field-type">date</span></div>
+        <div class="field"><span>status</span><span class="field-type">enum</span></div>
+      </div>
+    </div>
+    <div class="table academic">
+      <div class="table-header">exams</div>
+      <div class="table-body">
+        <div class="field"><span><span class="pk">PK</span>id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span><span class="fk">FK</span>academic_year_id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span>name</span><span class="field-type">varchar</span></div>
+        <div class="field"><span>total_marks</span><span class="field-type">int</span></div>
+      </div>
+    </div>
+    <div class="table academic">
+      <div class="table-header">exam_marks</div>
+      <div class="table-body">
+        <div class="field"><span><span class="pk">PK</span>id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span><span class="fk">FK</span>exam_id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span><span class="fk">FK</span>student_id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span><span class="fk">FK</span>subject_id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span>marks</span><span class="field-type">int</span></div>
+        <div class="field"><span>grade</span><span class="field-type">varchar</span></div>
+      </div>
+    </div>
+
+    <!-- BILLING GROUP -->
+    <div class="group-label">Fees &amp; Billing</div>
+    <div class="table billing">
+      <div class="table-header">fee_plans</div>
+      <div class="table-body">
+        <div class="field"><span><span class="pk">PK</span>id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span><span class="fk">FK</span>school_id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span><span class="fk">FK</span>class_id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span>title</span><span class="field-type">varchar</span></div>
+        <div class="field"><span>amount</span><span class="field-type">numeric</span></div>
+        <div class="field"><span>frequency</span><span class="field-type">enum</span></div>
+      </div>
+    </div>
+    <div class="table billing">
+      <div class="table-header">invoices</div>
+      <div class="table-body">
+        <div class="field"><span><span class="pk">PK</span>id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span><span class="fk">FK</span>enrollment_id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span>month</span><span class="field-type">date</span></div>
+        <div class="field"><span>amount</span><span class="field-type">numeric</span></div>
+        <div class="field"><span>due_date</span><span class="field-type">date</span></div>
+        <div class="field"><span>status</span><span class="field-type">enum</span></div>
+      </div>
+    </div>
+    <div class="table billing">
+      <div class="table-header">payments</div>
+      <div class="table-body">
+        <div class="field"><span><span class="pk">PK</span>id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span><span class="fk">FK</span>invoice_id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span>amount</span><span class="field-type">numeric</span></div>
+        <div class="field"><span>method</span><span class="field-type">enum</span></div>
+        <div class="field"><span>paid_at</span><span class="field-type">timestamp</span></div>
+        <div class="field"><span>receipt_no</span><span class="field-type">varchar</span></div>
+      </div>
+    </div>
+
+    <!-- USERS GROUP -->
+    <div class="group-label">Users, Staff &amp; CRM (per School)</div>
+    <div class="table system">
+      <div class="table-header">users</div>
+      <div class="table-body">
+        <div class="field"><span><span class="pk">PK</span>id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span><span class="fk">FK</span>school_id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span>name</span><span class="field-type">varchar</span></div>
+        <div class="field"><span>email</span><span class="field-type">varchar</span></div>
+        <div class="field"><span>role</span><span class="field-type">enum</span></div>
+      </div>
+    </div>
+    <div class="table system">
+      <div class="table-header">staff</div>
+      <div class="table-body">
+        <div class="field"><span><span class="pk">PK</span>id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span><span class="fk">FK</span>school_id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span><span class="fk">FK</span>user_id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span>designation</span><span class="field-type">varchar</span></div>
+        <div class="field"><span>salary</span><span class="field-type">numeric</span></div>
+      </div>
+    </div>
+    <div class="table system">
+      <div class="table-header">inquiries (CRM)</div>
+      <div class="table-body">
+        <div class="field"><span><span class="pk">PK</span>id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span><span class="fk">FK</span>school_id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span>parent_name</span><span class="field-type">varchar</span></div>
+        <div class="field"><span>phone</span><span class="field-type">varchar</span></div>
+        <div class="field"><span>status</span><span class="field-type">enum</span></div>
+      </div>
+    </div>
+    <div class="table system">
+      <div class="table-header">followups (CRM)</div>
+      <div class="table-body">
+        <div class="field"><span><span class="pk">PK</span>id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span><span class="fk">FK</span>inquiry_id</span><span class="field-type">uuid</span></div>
+        <div class="field"><span>note</span><span class="field-type">text</span></div>
+        <div class="field"><span>next_date</span><span class="field-type">date</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

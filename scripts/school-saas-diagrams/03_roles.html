@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>School SaaS — User Roles Hierarchy</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #FFFFFF;
+    padding: 40px;
+    color: #243447;
+  }
+  .canvas { width: 1400px; background: #FFFFFF; }
+  .header { text-align: center; margin-bottom: 32px; }
+  .header h1 { font-size: 28px; font-weight: 700; color: #243447; letter-spacing: -0.4px; }
+  .header p { font-size: 14px; color: #64748B; margin-top: 6px; }
+
+  .tree { display: flex; flex-direction: column; align-items: center; gap: 0; }
+
+  .level {
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+    position: relative;
+    width: 100%;
+    padding: 18px 0;
+  }
+
+  .card {
+    background: #FFFFFF;
+    border-radius: 10px;
+    padding: 16px 18px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    width: 220px;
+    text-align: center;
+    border: 1.5px solid #E2E8F0;
+  }
+  .card .role {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1E293B;
+    margin-bottom: 4px;
+  }
+  .card .desc {
+    font-size: 11px;
+    color: #64748B;
+    line-height: 1.45;
+  }
+  .card .perms {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px dashed #E2E8F0;
+    font-size: 10px;
+    color: #475569;
+    line-height: 1.5;
+  }
+
+  .super {
+    background: linear-gradient(180deg, #4C6EF5 0%, #3B5BDB 100%);
+    border-color: #3B5BDB;
+    color: #FFFFFF;
+  }
+  .super .role { color: #FFFFFF; font-size: 16px; }
+  .super .desc { color: #DBEAFE; }
+  .super .perms { color: #DBEAFE; border-top-color: rgba(255,255,255,0.2); }
+
+  .admin { border-color: #0F766E; background: #F0FDF4; }
+  .admin .role { color: #0F766E; }
+
+  .mid { border-color: #B45309; background: #FFF7ED; }
+  .mid .role { color: #B45309; }
+
+  .end { border-color: #475569; background: #F1F5F9; }
+  .end .role { color: #475569; }
+
+  .arrow {
+    width: 2px;
+    background: #94A3B8;
+    margin: 0 auto;
+  }
+  .arrow-down { height: 28px; }
+  .arrow-label {
+    background: #FFFFFF;
+    padding: 2px 8px;
+    border: 1px solid #CBD5E1;
+    border-radius: 10px;
+    font-size: 10px;
+    color: #64748B;
+    margin: -14px auto 0 auto;
+    display: inline-block;
+    width: fit-content;
+  }
+
+  .group-row {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+  }
+
+  .footer-note {
+    margin-top: 32px;
+    padding: 16px 20px;
+    background: #F8FAFC;
+    border-left: 3px solid #4C6EF5;
+    border-radius: 6px;
+    font-size: 12px;
+    color: #334155;
+    line-height: 1.6;
+  }
+  .footer-note strong { color: #1E293B; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="header">
+    <h1>School SaaS — User Roles &amp; Permissions Hierarchy</h1>
+    <p>Top-down access control. Higher roles can do everything lower roles can — but every permission is also enforced server-side.</p>
+  </div>
+
+  <div class="tree">
+    <!-- Level 1: Super Admin -->
+    <div class="level">
+      <div class="card super" style="width:280px;">
+        <div class="role">Super Admin (You)</div>
+        <div class="desc">Platform owner. Full control of every school &amp; every plan.</div>
+        <div class="perms">• Create / suspend / delete any school<br>• Set pricing plans &amp; limits<br>• View platform-wide reports &amp; MRR<br>• Manage audit logs</div>
+      </div>
+    </div>
+    <div class="arrow arrow-down"></div>
+    <div class="arrow-label">owns &amp; manages</div>
+
+    <!-- Level 2: School Admin -->
+    <div class="level">
+      <div class="card admin" style="width:260px;">
+        <div class="role">School Admin</div>
+        <div class="desc">Owner of one school's data &amp; settings.</div>
+        <div class="perms">• Setup classes, sections, subjects<br>• Invite &amp; manage staff &amp; users<br>• Configure fee plans<br>• View all school reports</div>
+      </div>
+    </div>
+    <div class="arrow arrow-down"></div>
+    <div class="arrow-label">manages staff of</div>
+
+    <!-- Level 3: Principal / Accountant -->
+    <div class="level">
+      <div class="group-row">
+        <div class="card mid">
+          <div class="role">Principal</div>
+          <div class="desc">Academic head.</div>
+          <div class="perms">• View &amp; approve results<br>• Monitor attendance<br>• Manage teacher workload<br>• View school reports</div>
+        </div>
+        <div class="card mid">
+          <div class="role">Accountant</div>
+          <div class="desc">Handles money.</div>
+          <div class="perms">• Create invoices<br>• Record payments &amp; receipts<br>• Track defaulters<br>• Generate financial reports</div>
+        </div>
+        <div class="card mid">
+          <div class="role">Admission Officer</div>
+          <div class="desc">CRM user.</div>
+          <div class="perms">• Log new inquiries<br>• Schedule follow-ups<br>• Convert lead → student<br>• Send offer messages</div>
+        </div>
+      </div>
+    </div>
+    <div class="arrow arrow-down"></div>
+    <div class="arrow-label">supervises</div>
+
+    <!-- Level 4: Teacher -->
+    <div class="level">
+      <div class="card end" style="width:240px;">
+        <div class="role">Teacher</div>
+        <div class="desc">Daily classroom operations.</div>
+        <div class="perms">• Mark own class attendance<br>• Enter exam marks<br>• View own class students<br>• Comment on student progress</div>
+      </div>
+    </div>
+    <div class="arrow arrow-down"></div>
+    <div class="arrow-label">serves</div>
+
+    <!-- Level 5: Parent & Student -->
+    <div class="level">
+      <div class="group-row">
+        <div class="card end" style="background:#F5F3FF;border-color:#7C3AED;">
+          <div class="role" style="color:#7C3AED;">Parent</div>
+          <div class="desc">Read-only portal.</div>
+          <div class="perms">• View child's attendance<br>• Pay fees online<br>• View results &amp; report cards<br>• Receive SMS / WhatsApp alerts</div>
+        </div>
+        <div class="card end" style="background:#F5F3FF;border-color:#7C3AED;">
+          <div class="role" style="color:#7C3AED;">Student</div>
+          <div class="desc">Optional, read-only.</div>
+          <div class="perms">• View own attendance<br>• View own results<br>• View timetable<br>• (No editing rights)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    <strong>Permission enforcement rule:</strong> The UI hides buttons the user cannot use, but the real check happens on the server. Every API call verifies the user's <code style="background:#F1F5F9;padding:1px 4px;border-radius:3px;">role</code> AND their <code style="background:#F1F5F9;padding:1px 4px;border-radius:3px;">school_id</code>. A teacher logged into School A can never mark attendance for School B, even by tampering with the request.
+  </div>
+</div>
+</body>
+</html>

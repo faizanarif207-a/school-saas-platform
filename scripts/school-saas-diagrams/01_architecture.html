@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>School SaaS — System Architecture</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #FFFFFF;
+    padding: 40px;
+    color: #243447;
+  }
+  .canvas {
+    width: 1400px;
+    background: #FFFFFF;
+  }
+  .header {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #243447;
+    letter-spacing: -0.4px;
+  }
+  .header p {
+    font-size: 14px;
+    color: #64748B;
+    margin-top: 6px;
+    font-weight: 400;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-bottom: 32px;
+  }
+  .panel {
+    background: #F8FAFC;
+    border-radius: 12px;
+    padding: 24px;
+  }
+  .panel-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #4C6EF5;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #E2E8F0;
+  }
+  /* User Hierarchy */
+  .hierarchy {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+  }
+  .level {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    position: relative;
+  }
+  .node {
+    background: #FFFFFF;
+    border: 1.5px solid #CBD5E1;
+    border-radius: 8px;
+    padding: 14px 18px;
+    text-align: center;
+    min-width: 160px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+  }
+  .node-primary {
+    border: 2px solid #4C6EF5;
+    background: #FFFFFF;
+  }
+  .node-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1E293B;
+    margin-bottom: 4px;
+  }
+  .node-desc {
+    font-size: 11px;
+    color: #64748B;
+    line-height: 1.4;
+  }
+  .node-super .node-title { color: #4C6EF5; }
+  .connector {
+    width: 2px;
+    height: 22px;
+    background: #94A3B8;
+  }
+  .h-line {
+    height: 2px;
+    background: #94A3B8;
+    align-self: center;
+  }
+  /* Tech Stack Layers */
+  .layers {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .layer {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-left: 3px solid #4C6EF5;
+    border-radius: 6px;
+    padding: 14px 16px;
+  }
+  .layer-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1E293B;
+    margin-bottom: 4px;
+  }
+  .layer-tech {
+    font-size: 11px;
+    color: #64748B;
+    line-height: 1.5;
+  }
+  .layer-tag {
+    display: inline-block;
+    background: #EFF6FF;
+    color: #1E40AF;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-right: 4px;
+    margin-top: 4px;
+  }
+  /* Bottom flow */
+  .flow {
+    background: #F8FAFC;
+    border-radius: 12px;
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: center;
+  }
+  .flow-step {
+    background: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #334155;
+  }
+  .flow-step-accent {
+    border-color: #4C6EF5;
+    color: #4C6EF5;
+    background: #EFF6FF;
+  }
+  .arrow {
+    color: #94A3B8;
+    font-size: 16px;
+    font-weight: 600;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="header">
+    <h1>School SaaS Platform — System Architecture</h1>
+    <p>Multi-tenant platform: one Super Admin controls many schools, each isolated and independently billed</p>
+  </div>
+
+  <div class="grid">
+    <!-- LEFT: User Hierarchy -->
+    <div class="panel">
+      <div class="panel-title">User &amp; Tenant Hierarchy</div>
+      <div class="hierarchy">
+        <div class="node node-primary node-super">
+          <div class="node-title">Super Admin (You)</div>
+          <div class="node-desc">Platform owner. Creates schools, sets plans, controls billing &amp; suspensions</div>
+        </div>
+        <div class="connector"></div>
+        <div class="level">
+          <div class="node">
+            <div class="node-title">School A</div>
+            <div class="node-desc">Tenant 1<br>Plan: Growth</div>
+          </div>
+          <div class="node">
+            <div class="node-title">School B</div>
+            <div class="node-desc">Tenant 2<br>Plan: Starter</div>
+          </div>
+          <div class="node">
+            <div class="node-title">School C</div>
+            <div class="node-desc">Tenant 3<br>Plan: Pro</div>
+          </div>
+        </div>
+        <div class="connector"></div>
+        <div class="level">
+          <div class="node">
+            <div class="node-title">School Users</div>
+            <div class="node-desc">Admin, Principal,<br>Teachers, Parents, Students</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:18px;padding:12px;background:#EFF6FF;border-radius:6px;border:1px solid #DBEAFE;">
+        <div style="font-size:11px;color:#1E40AF;font-weight:600;margin-bottom:4px;">Tenant Isolation Rule</div>
+        <div style="font-size:11px;color:#334155;line-height:1.5;">Every database row carries <code style="background:#DBEAFE;padding:1px 4px;border-radius:3px;">school_id</code>. Row-Level Security (RLS) guarantees School A can never see School B's data.</div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Tech Stack Layers -->
+    <div class="panel">
+      <div class="panel-title">Tech Stack Layers</div>
+      <div class="layers">
+        <div class="layer">
+          <div class="layer-name">1. Presentation Layer (Frontend)</div>
+          <div class="layer-tech">React UI rendered by Next.js App Router, Tailwind CSS, shadcn/ui components</div>
+          <div>
+            <span class="layer-tag">Next.js 16</span>
+            <span class="layer-tag">React 19</span>
+            <span class="layer-tag">Tailwind</span>
+            <span class="layer-tag">shadcn/ui</span>
+          </div>
+        </div>
+        <div class="layer">
+          <div class="layer-name">2. Application Layer (Backend)</div>
+          <div class="layer-tech">Server Actions &amp; API routes handle business logic, permissions, billing &amp; PDF generation</div>
+          <div>
+            <span class="layer-tag">Server Actions</span>
+            <span class="layer-tag">API Routes</span>
+            <span class="layer-tag">TypeScript</span>
+          </div>
+        </div>
+        <div class="layer">
+          <div class="layer-name">3. Auth &amp; Security Layer</div>
+          <div class="layer-tech">Supabase Auth for login; role-based access (Super / School / Teacher / Parent); RLS for tenant isolation</div>
+          <div>
+            <span class="layer-tag">Supabase Auth</span>
+            <span class="layer-tag">RBAC</span>
+            <span class="layer-tag">Row Level Security</span>
+          </div>
+        </div>
+        <div class="layer">
+          <div class="layer-name">4. Data Layer (Database)</div>
+          <div class="layer-tech">PostgreSQL stores all schools, students, fees, attendance. Prisma ORM for safe queries.</div>
+          <div>
+            <span class="layer-tag">PostgreSQL</span>
+            <span class="layer-tag">Supabase DB</span>
+            <span class="layer-tag">Prisma ORM</span>
+          </div>
+        </div>
+        <div class="layer">
+          <div class="layer-name">5. External Services Layer</div>
+          <div class="layer-tech">SMS / WhatsApp for parents, email for invites, file storage for receipts, payments for subscriptions</div>
+          <div>
+            <span class="layer-tag">Twilio / SMS</span>
+            <span class="layer-tag">Resend</span>
+            <span class="layer-tag">Supabase Storage</span>
+            <span class="layer-tag">JazzCash / Easypaisa</span>
+          </div>
+        </div>
+        <div class="layer">
+          <div class="layer-name">6. Hosting &amp; Monitoring Layer</div>
+          <div class="layer-tech">Vercel hosts the Next.js app (auto-deploy from GitHub). Sentry tracks errors in production.</div>
+          <div>
+            <span class="layer-tag">Vercel</span>
+            <span class="layer-tag">GitHub</span>
+            <span class="layer-tag">Sentry</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom: Request Flow -->
+  <div class="flow">
+    <div class="flow-step flow-step-accent">User clicks in browser</div>
+    <span class="arrow">→</span>
+    <div class="flow-step">Next.js Server Action</div>
+    <span class="arrow">→</span>
+    <div class="flow-step">Permission + school_id check</div>
+    <span class="arrow">→</span>
+    <div class="flow-step">Prisma query (RLS enforced)</div>
+    <span class="arrow">→</span>
+    <div class="flow-step">PostgreSQL returns data</div>
+    <span class="arrow">→</span>
+    <div class="flow-step flow-step-accent">UI updates</div>
+  </div>
+</div>
+</body>
+</html>

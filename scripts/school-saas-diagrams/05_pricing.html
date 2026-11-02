@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>School SaaS — Pricing Tiers</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #FFFFFF;
+    padding: 40px;
+    color: #243447;
+  }
+  .canvas { width: 1500px; background: #FFFFFF; }
+  .header { text-align: center; margin-bottom: 36px; }
+  .header h1 { font-size: 28px; font-weight: 700; color: #243447; letter-spacing: -0.4px; }
+  .header p { font-size: 14px; color: #64748B; margin-top: 6px; }
+
+  .tiers {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 28px;
+  }
+  .tier {
+    background: #FFFFFF;
+    border: 1.5px solid #E2E8F0;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .tier.featured {
+    border-color: #4C6EF5;
+    box-shadow: 0 4px 12px rgba(76, 110, 245, 0.12);
+    transform: translateY(-4px);
+  }
+  .tier-head {
+    padding: 20px 18px;
+    text-align: center;
+    border-bottom: 1px solid #F1F5F9;
+  }
+  .tier-name {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1E293B;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+  }
+  .tier-students {
+    font-size: 11px;
+    color: #64748B;
+    margin-top: 4px;
+  }
+  .tier-price {
+    margin-top: 14px;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 4px;
+  }
+  .price-amount {
+    font-size: 32px;
+    font-weight: 800;
+    color: #1E293B;
+    letter-spacing: -0.8px;
+  }
+  .price-unit {
+    font-size: 12px;
+    color: #64748B;
+  }
+  .tier.featured .price-amount { color: #4C6EF5; }
+
+  .tier-badge {
+    display: inline-block;
+    background: #4C6EF5;
+    color: #FFFFFF;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+  }
+
+  .tier-body {
+    padding: 18px;
+    flex: 1;
+  }
+  .tier-section {
+    font-size: 10px;
+    font-weight: 700;
+    color: #94A3B8;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin: 12px 0 8px 0;
+    padding-top: 10px;
+    border-top: 1px dashed #E2E8F0;
+  }
+  .tier-section:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+  .feature {
+    font-size: 12px;
+    color: #334155;
+    padding: 4px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    line-height: 1.4;
+  }
+  .feature .icon {
+    flex-shrink: 0;
+    font-size: 11px;
+    margin-top: 1px;
+  }
+  .yes { color: #10B981; }
+  .no { color: #CBD5E1; }
+  .no .feature-text { color: #94A3B8; text-decoration: line-through; }
+
+  .extras {
+    background: #F8FAFC;
+    border-radius: 12px;
+    padding: 20px 24px;
+  }
+  .extras-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1E293B;
+    margin-bottom: 14px;
+  }
+  .extras-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  .extra-item {
+    background: #FFFFFF;
+    border-left: 3px solid #4C6EF5;
+    border-radius: 6px;
+    padding: 12px 14px;
+  }
+  .extra-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: #1E293B;
+    margin-bottom: 4px;
+  }
+  .extra-detail {
+    font-size: 11px;
+    color: #64748B;
+    line-height: 1.45;
+  }
+
+  .footer-note {
+    margin-top: 24px;
+    padding: 14px 18px;
+    background: #FFF7ED;
+    border-left: 3px solid #B45309;
+    border-radius: 6px;
+    font-size: 12px;
+    color: #92400E;
+    line-height: 1.55;
+  }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="header">
+    <h1>School SaaS — Pricing Tiers (PKR)</h1>
+    <p>Draft numbers. Validate with 5–10 real schools before launch — these are ceilings, not floors.</p>
+  </div>
+
+  <div class="tiers">
+    <!-- STARTER -->
+    <div class="tier">
+      <div class="tier-head">
+        <div class="tier-name">Starter</div>
+        <div class="tier-students">up to 300 students</div>
+        <div class="tier-price">
+          <span class="price-amount">4,000–6,000</span>
+          <span class="price-unit">PKR / month</span>
+        </div>
+      </div>
+      <div class="tier-body">
+        <div class="tier-section">Phase 1 only</div>
+        <div class="feature"><span class="icon yes">✓</span><span class="feature-text">Student admission &amp; profiles</span></div>
+        <div class="feature"><span class="icon yes">✓</span><span class="feature-text">Daily attendance</span></div>
+        <div class="feature"><span class="icon yes">✓</span><span class="feature-text">Fees, invoices, PDF receipts</span></div>
+        <div class="feature"><span class="icon yes">✓</span><span class="feature-text">Basic reports</span></div>
+        <div class="feature"><span class="icon yes">✓</span><span class="feature-text">1 admin + 5 staff logins</span></div>
+        <div class="tier-section">Not included</div>
+        <div class="feature no"><span class="icon no">✕</span><span class="feature-text">Exams &amp; result cards</span></div>
+        <div class="feature no"><span class="icon no">✕</span><span class="feature-text">SMS / WhatsApp</span></div>
+        <div class="feature no"><span class="icon no">✕</span><span class="feature-text">CRM module</span></div>
+        <div class="feature no"><span class="icon no">✕</span><span class="feature-text">Payroll &amp; HR</span></div>
+      </div>
+    </div>
+
+    <!-- GROWTH (featured) -->
+    <div class="tier featured">
+      <div class="tier-head">
+        <div class="tier-badge">Most Popular</div>
+        <div class="tier-name">Growth</div>
+        <div class="tier-students">up to 800 students</div>
+        <div class="tier-price">
+          <span class="price-amount">9,000–12,000</span>
+          <span class="price-unit">PKR / month</span>
+        </div>
+      </div>
+      <div class="tier-body">
+        <div class="tier-section">Everything in Starter, plus</div>
+        <div class="feature"><span class="icon yes">✓</span><span class="feature-text">Exams &amp; result cards (Urdu/English)</span></div>
+        <div class="feature"><span class="icon yes">✓</span><span class="feature-text">Teacher attendance</span></div>
+        <div class="feature"><span class="icon yes">✓</span><span class="feature-text">Parent portal with messaging</span></div>
+        <div class="feature"><span class="icon yes">✓</span><span class="feature-text">SMS alerts (pass-through rate)</span></div>
+        <div class="feature"><span class="icon yes">✓</span><span class="feature-text">Excel / PDF exports</span></div>
+        <div class="feature"><span class="icon yes">✓</span><span class="feature-text">Up to 20 staff logins</span></div>
+        <div class="tier-section">Not included</div>
+        <div class="feature no"><span class="icon no">✕</span><span class="feature-text">CRM &amp; multi-campus</span></div>
+        <div class="feature no"><span class="icon no">✕</span><span class="feature-text">Payroll &amp; biometric</span></div>
+      </div>
+    </div>
+
+    <!-- PRO -->
+    <div class="tier">
+      <div class="tier-head">
+        <div class="tier-name">Pro</div>
+        <div class="tier-students">up to 2,000 students</div>
+        <div class="tier-price">
+          <span class="price-amount">18,000–25,000</span>
+          <span class="price-unit">PKR / month</span>
+        </div>
+      </div>
+      <div class="tier-body">
+        <div class="tier-section">Everything in Growth, plus</div>
+        <div class="feature"><span class="icon yes">✓</span><span class="feature-text">Admission CRM module</span></div>
+        <div class="feature"><span class="icon yes">✓</span><span class="feature-text">Payroll &amp; HR management</span></div>
+        <div class="feature"><span class="icon yes">✓</span><span class="feature-text">Multi-campus support</span></div>
+        <div class="feature"><span class="icon yes">✓</span><span class="feature-text">Biometric attendance API</span></div>
+        <div class="feature"><span class="icon yes">✓</span><span class="feature-text">Library &amp; transport</span></div>
+        <div class="feature"><span class="icon yes">✓</span><span class="feature-text">Unlimited staff logins</span></div>
+        <div class="tier-section">Not included</div>
+        <div class="feature no"><span class="icon no">✕</span><span class="feature-text">Canteen POS</span></div>
+        <div class="feature no"><span class="icon no">✕</span><span class="feature-text">Custom branding</span></div>
+      </div>
+    </div>
+
+    <!-- ENTERPRISE -->
+    <div class="tier">
+      <div class="tier-head">
+        <div class="tier-name">Enterprise</div>
+        <div class="tier-students">unlimited</div>
+        <div class="tier-price">
+          <span class="price-amount">Custom</span>
+          <span class="price-unit">annual contract</span>
+        </div>
+      </div>
+      <div class="tier-body">
+        <div class="tier-section">Everything in Pro, plus</div>
+        <div class="feature"><span class="icon yes">✓</span><span class="feature-text">Canteen POS module</span></div>
+        <div class="feature"><span class="icon yes">✓</span><span class="feature-text">Online payments gateway</span></div>
+        <div class="feature"><span class="icon yes">✓</span><span class="feature-text">Custom branding (white-label)</span></div>
+        <div class="feature"><span class="icon yes">✓</span><span class="feature-text">Dedicated account manager</span></div>
+        <div class="feature"><span class="icon yes">✓</span><span class="feature-text">Custom feature development</span></div>
+        <div class="feature"><span class="icon yes">✓</span><span class="feature-text">Priority support (SLA)</span></div>
+        <div class="feature"><span class="icon yes">✓</span><span class="feature-text">On-premise / private cloud option</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Extra charges -->
+  <div class="extras">
+    <div class="extras-title">One-time &amp; variable charges</div>
+    <div class="extras-grid">
+      <div class="extra-item">
+        <div class="extra-name">Setup Fee (one-time)</div>
+        <div class="extra-detail">PKR 15,000–30,000. Covers data migration from old system, training, and initial configuration.</div>
+      </div>
+      <div class="extra-item">
+        <div class="extra-name">Extra Students</div>
+        <div class="extra-detail">PKR 15–25 per student per month beyond plan limit. Auto-billed, no manual upgrade needed.</div>
+      </div>
+      <div class="extra-item">
+        <div class="extra-name">Extra Campus</div>
+        <div class="extra-detail">PKR 3,000–6,000 per additional campus per month. Applies from Growth plan onwards.</div>
+      </div>
+      <div class="extra-item">
+        <div class="extra-name">SMS / WhatsApp</div>
+        <div class="extra-detail">Pass-through rate + 10–15% margin. Charged per message bundle, NOT per student.</div>
+      </div>
+      <div class="extra-item">
+        <div class="extra-name">Annual Discount</div>
+        <div class="extra-detail">Pay 10 months upfront, get 2 months free. Improves your cash flow &amp; reduces churn.</div>
+      </div>
+      <div class="extra-item">
+        <div class="extra-name">Free Trial</div>
+        <div class="extra-detail">30 days, no card required. Full Starter plan, 1 school, 50 students cap. Auto-expires.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    <strong>Pricing strategy:</strong> Founder's price — first 10–20 schools get their tier locked for life. Referral reward — bring another school, get 1 month free. These two hooks build early traction and word-of-mouth without discounting the published price.
+  </div>
+</div>
+</body>
+</html>

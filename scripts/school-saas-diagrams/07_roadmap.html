@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>School SaaS — Build Roadmap</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #FFFFFF;
+    padding: 40px;
+    color: #243447;
+  }
+  .canvas { width: 1560px; background: #FFFFFF; }
+  .header { text-align: center; margin-bottom: 36px; }
+  .header h1 { font-size: 28px; font-weight: 700; color: #243447; letter-spacing: -0.4px; }
+  .header p { font-size: 14px; color: #64748B; margin-top: 6px; }
+
+  .timeline {
+    position: relative;
+    padding-left: 0;
+  }
+  .week-row {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 20px;
+    margin-bottom: 14px;
+    align-items: stretch;
+  }
+  .week-label {
+    background: #F1F5F9;
+    border-radius: 8px;
+    padding: 12px 8px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .week-num {
+    font-size: 10px;
+    color: #64748B;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+  }
+  .week-day {
+    font-size: 20px;
+    font-weight: 700;
+    color: #1E293B;
+    margin-top: 2px;
+    letter-spacing: -0.5px;
+  }
+  .week-content {
+    background: #F8FAFC;
+    border-radius: 10px;
+    padding: 14px 18px;
+    border-left: 3px solid #4C6EF5;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .week-content h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1E293B;
+    margin-bottom: 4px;
+  }
+  .week-content p {
+    font-size: 12px;
+    color: #475569;
+    line-height: 1.5;
+  }
+  .deliverables {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  .deliverable {
+    font-size: 10px;
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    padding: 2px 8px;
+    border-radius: 10px;
+    color: #475569;
+  }
+  .milestone {
+    background: linear-gradient(135deg, #4C6EF5 0%, #3B5BDB 100%);
+    color: #FFFFFF;
+    border-left: 3px solid #1E40AF;
+  }
+  .milestone h3 { color: #FFFFFF; }
+  .milestone p { color: #DBEAFE; }
+  .milestone .deliverable {
+    background: rgba(255,255,255,0.15);
+    color: #FFFFFF;
+    border-color: rgba(255,255,255,0.25);
+  }
+  .pilot {
+    background: linear-gradient(135deg, #B45309 0%, #92400E 100%);
+    color: #FFFFFF;
+    border-left: 3px solid #78350F;
+  }
+  .pilot h3 { color: #FFFFFF; }
+  .pilot p { color: #FEF3C7; }
+  .pilot .deliverable {
+    background: rgba(255,255,255,0.15);
+    color: #FFFFFF;
+    border-color: rgba(255,255,255,0.25);
+  }
+
+  .phases-summary {
+    margin-top: 32px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .phase-card {
+    background: #F8FAFC;
+    border-radius: 10px;
+    padding: 14px 16px;
+    border-top: 3px solid;
+  }
+  .phase-card-1 { border-top-color: #4C6EF5; }
+  .phase-card-2 { border-top-color: #0F766E; }
+  .phase-card-3 { border-top-color: #B45309; }
+  .phase-card-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #1E293B;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+  }
+  .phase-card-time {
+    font-size: 11px;
+    color: #64748B;
+    margin-bottom: 8px;
+  }
+  .phase-card-detail {
+    font-size: 11px;
+    color: #475569;
+    line-height: 1.5;
+  }
+  .phase-card-detail strong { color: #1E293B; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="header">
+    <h1>School SaaS — MVP Build Roadmap (12 Weeks)</h1>
+    <p>One full-time solo developer. Part-time? Multiply by ~1.7×. Pilot starts Week 11.</p>
+  </div>
+
+  <div class="timeline">
+    <div class="week-row">
+      <div class="week-label"><div class="week-num">Week</div><div class="week-day">01</div></div>
+      <div class="week-content">
+        <h3>Foundation &amp; Setup</h3>
+        <p>Finalize requirements with 3–5 schools. Set up GitHub repo, Next.js 16 project, Supabase/Neon DB, Prisma schema, auth.</p>
+        <div class="deliverables">
+          <span class="deliverable">GitHub repo</span>
+          <span class="deliverable">Next.js app</span>
+          <span class="deliverable">DB schema v1</span>
+          <span class="deliverable">Auth configured</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="week-row">
+      <div class="week-label"><div class="week-num">Week</div><div class="week-day">02</div></div>
+      <div class="week-content">
+        <h3>Super Admin Dashboard</h3>
+        <p>Build the screens to create / suspend schools, assign plans, and view platform-wide stats. Wire up DB.</p>
+        <div class="deliverables">
+          <span class="deliverable">/admin dashboard</span>
+          <span class="deliverable">School CRUD</span>
+          <span class="deliverable">Plan assignment</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="week-row">
+      <div class="week-label"><div class="week-num">Week</div><div class="week-day">03</div></div>
+      <div class="week-content">
+        <h3>School Setup Module</h3>
+        <p>Inside a school: create campuses, classes, sections, subjects. Invite staff users with role-based access.</p>
+        <div class="deliverables">
+          <span class="deliverable">Campus CRUD</span>
+          <span class="deliverable">Class/Section</span>
+          <span class="deliverable">Staff invites</span>
+          <span class="deliverable">RBAC roles</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="week-row">
+      <div class="week-label"><div class="week-num">Week</div><div class="week-day">04</div></div>
+      <div class="week-content">
+        <h3>Students &amp; Admissions</h3>
+        <p>Admission form, student profile, guardian contact, enrollment per academic year. Bulk import via Excel.</p>
+        <div class="deliverables">
+          <span class="deliverable">Student profile</span>
+          <span class="deliverable">Enrollment</span>
+          <span class="deliverable">Guardian CRUD</span>
+          <span class="deliverable">Excel import</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="week-row">
+      <div class="week-label"><div class="week-num">Week</div><div class="week-day">05</div></div>
+      <div class="week-content">
+        <h3>Attendance Module</h3>
+        <p>Daily class-wise attendance marking. Absent reports. Monthly summary per student.</p>
+        <div class="deliverables">
+          <span class="deliverable">Mark attendance</span>
+          <span class="deliverable">Daily report</span>
+          <span class="deliverable">Monthly summary</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="week-row">
+      <div class="week-label"><div class="week-num">Week</div><div class="week-day">06</div></div>
+      <div class="week-content">
+        <h3>Fees &amp; Receipts (Core of MVP)</h3>
+        <p>Fee plans per class. Generate monthly invoices. Record cash/card payments. Print PDF receipts.</p>
+        <div class="deliverables">
+          <span class="deliverable">Fee plan</span>
+          <span class="deliverable">Invoices</span>
+          <span class="deliverable">Payment entry</span>
+          <span class="deliverable">PDF receipts</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="week-row">
+      <div class="week-label"><div class="week-num">Week</div><div class="week-day">07</div></div>
+      <div class="week-content">
+        <h3>Parent Portal (Basic)</h3>
+        <p>Parents log in, view child attendance + fee status, download receipts. Read-only. Test permissions end-to-end.</p>
+        <div class="deliverables">
+          <span class="deliverable">Parent login</span>
+          <span class="deliverable">Attendance view</span>
+          <span class="deliverable">Fee status</span>
+          <span class="deliverable">Receipt download</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="week-row">
+      <div class="week-label"><div class="week-num">Week</div><div class="week-day">08</div></div>
+      <div class="week-content">
+        <h3>Billing, Audit &amp; Hardening</h3>
+        <p>Subscription tracking, grace periods, auto-suspend on non-payment. Audit log for every Super Admin action.</p>
+        <div class="deliverables">
+          <span class="deliverable">Subscription status</span>
+          <span class="deliverable">Grace period</span>
+          <span class="deliverable">Auto-suspend</span>
+          <span class="deliverable">Audit log</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="week-row">
+      <div class="week-label"><div class="week-num">Week</div><div class="week-day">09</div></div>
+      <div class="week-content">
+        <h3>Bug Fixing &amp; Polish</h3>
+        <p>Fix issues from internal QA. Improve UX (loading states, error messages, empty states). Mobile responsive check.</p>
+        <div class="deliverables">
+          <span class="deliverable">Bug fixes</span>
+          <span class="deliverable">Empty states</span>
+          <span class="deliverable">Mobile responsive</span>
+          <span class="deliverable">Error handling</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="week-row">
+      <div class="week-label"><div class="week-num">Week</div><div class="week-day">10</div></div>
+      <div class="week-content">
+        <h3>Pilot Prep &amp; Data Migration</h3>
+        <p>Onboard pilot school. Migrate their existing student + fee data. Train their staff. Write basic user docs.</p>
+        <div class="deliverables">
+          <span class="deliverable">Data migration tool</span>
+          <span class="deliverable">Staff training</span>
+          <span class="deliverable">User docs</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="week-row">
+      <div class="week-label"><div class="week-num">Week</div><div class="week-day">11</div></div>
+      <div class="week-content pilot">
+        <h3>★ Pilot School Goes Live</h3>
+        <p>First real school uses the system daily. You monitor errors via Sentry, fix urgent issues within 24 hours.</p>
+        <div class="deliverables">
+          <span class="deliverable">Production live</span>
+          <span class="deliverable">Daily monitoring</span>
+          <span class="deliverable">Hotfixes</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="week-row">
+      <div class="week-label"><div class="week-num">Week</div><div class="week-day">12</div></div>
+      <div class="week-content milestone">
+        <h3>★ MVP Complete — Start Phase 2 Planning</h3>
+        <p>Collect 2 weeks of pilot feedback. Decide what to build first in Phase 2 (most likely: exams &amp; SMS). Plan next sprint.</p>
+        <div class="deliverables">
+          <span class="deliverable">Feedback report</span>
+          <span class="deliverable">Phase 2 plan</span>
+          <span class="deliverable">Onboard school #2</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase summary -->
+  <div class="phases-summary">
+    <div class="phase-card phase-card-1">
+      <div class="phase-card-title">Phase 1 — MVP (Weeks 1–12)</div>
+      <div class="phase-card-time">~3 months · 1 developer</div>
+      <div class="phase-card-detail"><strong>Outcome:</strong> One school is live &amp; paying. You have a saleable product. <strong>Cost:</strong> Vercel $20 + Supabase $25 + your time.</div>
+    </div>
+    <div class="phase-card phase-card-2">
+      <div class="phase-card-title">Phase 2 — Academics + CRM</div>
+      <div class="phase-card-time">~6–8 weeks · after MVP</div>
+      <div class="phase-card-detail"><strong>Outcome:</strong> Exams, result cards, SMS to parents, admission CRM. <strong>Billing:</strong> bump Starter → Growth upsell.</div>
+    </div>
+    <div class="phase-card phase-card-3">
+      <div class="phase-card-title">Phase 3 — Scale Modules</div>
+      <div class="phase-card-time">~8–10 weeks · after Phase 2</div>
+      <div class="phase-card-detail"><strong>Outcome:</strong> Payroll, biometric, canteen POS, online payments, mobile app. <strong>Billing:</strong> Pro &amp; Enterprise tier unlocks.</div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

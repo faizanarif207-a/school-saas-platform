@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>School SaaS — Modules by Phase</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #FFFFFF;
+    padding: 40px;
+    color: #243447;
+  }
+  .canvas { width: 1500px; background: #FFFFFF; }
+  .header { text-align: center; margin-bottom: 36px; }
+  .header h1 { font-size: 28px; font-weight: 700; color: #243447; letter-spacing: -0.4px; }
+  .header p { font-size: 14px; color: #64748B; margin-top: 6px; }
+
+  .phases {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+  }
+  .phase {
+    background: #F8FAFC;
+    border-radius: 12px;
+    padding: 20px;
+    border-top: 4px solid;
+  }
+  .phase-1 { border-top-color: #4C6EF5; }
+  .phase-2 { border-top-color: #0F766E; }
+  .phase-3 { border-top-color: #B45309; }
+
+  .phase-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .phase-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+  }
+  .phase-1 .phase-label { color: #4C6EF5; }
+  .phase-2 .phase-label { color: #0F766E; }
+  .phase-3 .phase-label { color: #B45309; }
+  .phase-time {
+    font-size: 11px;
+    color: #64748B;
+    background: #FFFFFF;
+    padding: 3px 10px;
+    border-radius: 12px;
+    border: 1px solid #E2E8F0;
+    font-weight: 500;
+  }
+  .phase-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #1E293B;
+    margin-bottom: 4px;
+  }
+  .phase-goal {
+    font-size: 12px;
+    color: #64748B;
+    line-height: 1.5;
+    margin-bottom: 18px;
+    padding-bottom: 14px;
+    border-bottom: 1px dashed #CBD5E1;
+  }
+  .modules {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .module {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    padding: 10px 12px;
+  }
+  .module-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1E293B;
+    margin-bottom: 3px;
+  }
+  .module-detail {
+    font-size: 11px;
+    color: #64748B;
+    line-height: 1.45;
+  }
+  .module-status {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 10px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .status-mvp { background: #DBEAFE; color: #1E40AF; }
+  .status-new { background: #D1FAE5; color: #065F46; }
+  .status-adv { background: #FEF3C7; color: #92400E; }
+
+  .footer-note {
+    margin-top: 36px;
+    padding: 16px 20px;
+    background: #F8FAFC;
+    border-left: 3px solid #4C6EF5;
+    border-radius: 6px;
+    font-size: 12px;
+    color: #334155;
+    line-height: 1.6;
+  }
+  .footer-note strong { color: #1E293B; }
+</style>
+</head>
+<body>
+<div class="canvas">
+  <div class="header">
+    <h1>School SaaS — Module &amp; Feature Roadmap</h1>
+    <p>Three phases. Phase 1 (MVP) ships first, gets real schools using it, then Phase 2 &amp; 3 build on top of validated usage.</p>
+  </div>
+
+  <div class="phases">
+    <!-- PHASE 1 -->
+    <div class="phase phase-1">
+      <div class="phase-header">
+        <span class="phase-label">Phase 1</span>
+        <span class="phase-time">~10–12 weeks</span>
+      </div>
+      <div class="phase-title">MVP — Core Operations</div>
+      <div class="phase-goal">Goal: a school can run day-to-day on this — admit students, mark attendance, collect fees, give receipts.</div>
+      <div class="modules">
+        <div class="module">
+          <div class="module-name">Super Admin Dashboard <span class="module-status status-mvp">Core</span></div>
+          <div class="module-detail">Create / suspend schools, assign plans, view platform MRR.</div>
+        </div>
+        <div class="module">
+          <div class="module-name">School Setup <span class="module-status status-mvp">Core</span></div>
+          <div class="module-detail">Campuses, classes, sections, subjects, academic year.</div>
+        </div>
+        <div class="module">
+          <div class="module-name">Student Admission &amp; Profile <span class="module-status status-mvp">Core</span></div>
+          <div class="module-detail">Online form, enrollment per year, guardian record.</div>
+        </div>
+        <div class="module">
+          <div class="module-name">Attendance <span class="module-status status-mvp">Core</span></div>
+          <div class="module-detail">Daily class-wise attendance; absent reports.</div>
+        </div>
+        <div class="module">
+          <div class="module-name">Fees &amp; Receipts <span class="module-status status-mvp">Core</span></div>
+          <div class="module-detail">Fee plans, monthly invoices, payment entry, PDF receipts.</div>
+        </div>
+        <div class="module">
+          <div class="module-name">Parent Portal (Basic) <span class="module-status status-mvp">Core</span></div>
+          <div class="module-detail">View child attendance &amp; fee status. Read-only.</div>
+        </div>
+        <div class="module">
+          <div class="module-name">Users &amp; Roles <span class="module-status status-mvp">Core</span></div>
+          <div class="module-detail">Login, RBAC, school_id-based isolation (RLS).</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 2 -->
+    <div class="phase phase-2">
+      <div class="phase-header">
+        <span class="phase-label">Phase 2</span>
+        <span class="phase-time">~6–8 weeks</span>
+      </div>
+      <div class="phase-title">Academics &amp; Engagement</div>
+      <div class="phase-goal">Goal: keep parents in the loop, digitise exam workflow, and convert walk-in inquiries into students.</div>
+      <div class="modules">
+        <div class="module">
+          <div class="module-name">Exams &amp; Result Cards <span class="module-status status-new">New</span></div>
+          <div class="module-detail">Marks entry, grading, printable report cards (Urdu/English).</div>
+        </div>
+        <div class="module">
+          <div class="module-name">Teacher Attendance <span class="module-status status-new">New</span></div>
+          <div class="module-detail">Staff daily check-in; monthly summary for payroll.</div>
+        </div>
+        <div class="module">
+          <div class="module-name">SMS &amp; WhatsApp <span class="module-status status-new">New</span></div>
+          <div class="module-detail">Fee reminders, absent alerts, exam result notifications.</div>
+        </div>
+        <div class="module">
+          <div class="module-name">Admission CRM <span class="module-status status-new">New</span></div>
+          <div class="module-detail">Inquiry → follow-up → conversion to student. Source tracking.</div>
+        </div>
+        <div class="module">
+          <div class="module-name">Reports &amp; Exports <span class="module-status status-new">New</span></div>
+          <div class="module-detail">Excel / PDF exports for accounts, attendance, results.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PHASE 3 -->
+    <div class="phase phase-3">
+      <div class="phase-header">
+        <span class="phase-label">Phase 3</span>
+        <span class="phase-time">~8–10 weeks</span>
+      </div>
+      <div class="phase-title">Operations &amp; Scale</div>
+      <div class="phase-goal">Goal: add revenue streams, scale to multi-campus, and reduce manual work for big schools.</div>
+      <div class="modules">
+        <div class="module">
+          <div class="module-name">Payroll &amp; HR <span class="module-status status-adv">Advanced</span></div>
+          <div class="module-detail">Salary, leave, payslips linked to attendance.</div>
+        </div>
+        <div class="module">
+          <div class="module-name">Library &amp; Transport <span class="module-status status-adv">Advanced</span></div>
+          <div class="module-detail">Book issue/return, transport routes &amp; fees.</div>
+        </div>
+        <div class="module">
+          <div class="module-name">Canteen POS <span class="module-status status-adv">Advanced</span></div>
+          <div class="module-detail">Cashier billing, stock, daily sales reports.</div>
+        </div>
+        <div class="module">
+          <div class="module-name">Online Payments <span class="module-status status-adv">Advanced</span></div>
+          <div class="module-detail">JazzCash, Easypaisa, bank transfer via gateway.</div>
+        </div>
+        <div class="module">
+          <div class="module-name">Biometric Integration <span class="module-status status-adv">Advanced</span></div>
+          <div class="module-detail">Thumb / face scanner API for staff &amp; students.</div>
+        </div>
+        <div class="module">
+          <div class="module-name">Mobile App (PWA) <span class="module-status status-adv">Advanced</span></div>
+          <div class="module-detail">Parent app: view reports, pay fees, get alerts.</div>
+        </div>
+        <div class="module">
+          <div class="module-name">Multi-Campus Reports <span class="module-status status-adv">Advanced</span></div>
+          <div class="module-detail">Consolidated views across all branches of a school.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    <strong>Sequencing principle:</strong> Each phase unlocks the next set of <em>chargeable</em> features. Phase 1 = "school can run". Phase 2 = "school can grow". Phase 3 = "school can scale". Pricing tiers (next diagram) gate which phase-2 / phase-3 modules a school gets based on plan.
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Emerson Technology - Brand Kit</title>
+<style>
+  :root {
+    --primary: #0064C8;
+    --primary-dark: #0A56A8;
+    --green: #0E9E56;
+    --amber: #F5A800;
+    --ink: #1C232D;
+    --muted: #5B6672;
+    --bg: #FDFDFB;
+    --border: #E6E8E4;
+    --cream: #FEF4DD;
+    --cream-ink: #7A5200;
+    --danger: #DC2626;
+    --purple: #7C3AED;
+    --rose: #E11D48;
+    --radius: 12px;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: Inter, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    line-height: 1.6;
+  }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 28px; }
+  section { padding: 64px 0; border-bottom: 1px solid var(--border); }
+  section:last-of-type { border-bottom: none; }
+  .eyebrow {
+    font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--primary); font-weight: 700; margin: 0 0 8px;
+  }
+  h1 { font-size: 52px; line-height: 1.1; margin: 0 0 16px; letter-spacing: -0.02em; }
+  h2 { font-size: 34px; line-height: 1.2; margin: 0 0 12px; letter-spacing: -0.01em; }
+  h3 { font-size: 18px; margin: 0 0 8px; }
+  p { margin: 0 0 12px; color: var(--muted); }
+  .lead { font-size: 18px; color: var(--ink); max-width: 720px; }
+  .card {
+    background: #fff; border: 1px solid var(--border); border-radius: var(--radius); padding: 22px;
+  }
+  .grid { display: grid; gap: 16px; }
+  .g2 { grid-template-columns: repeat(2, 1fr); }
+  .g3 { grid-template-columns: repeat(3, 1fr); }
+  .g4 { grid-template-columns: repeat(4, 1fr); }
+  .g5 { grid-template-columns: repeat(5, 1fr); }
+  @media (max-width: 800px) {
+    .g2, .g3, .g4, .g5 { grid-template-columns: 1fr; }
+    h1 { font-size: 36px; }
+    h2 { font-size: 26px; }
+  }
+  .tag {
+    display: inline-block; font-size: 12px; font-weight: 600; padding: 4px 10px;
+    border-radius: 999px; background: var(--cream); color: var(--cream-ink);
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .06em; }
+  code, .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px; }
+  .do { color: var(--green); font-weight: 700; }
+  .dont { color: var(--danger); font-weight: 700; }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<section style="padding: 80px 0; background: #fff;">
+  <div class="wrap">
+    <svg width="360" height="90" viewBox="0 0 360 90" aria-label="Emerson logo" role="img">
+      <rect x="0" y="0" width="64" height="26" fill="#F5A800"/>
+      <rect x="0" y="32" width="48" height="26" fill="#0E9E56"/>
+      <rect x="0" y="64" width="64" height="26" fill="#0064C8"/>
+      <text x="76" y="78" font-family="Inter, Arial, sans-serif" font-size="74" font-weight="700" fill="#444" letter-spacing="-1">Emerson</text>
+    </svg>
+    <p class="eyebrow" style="margin-top: 48px;">Brand Kit · 2026</p>
+    <h1>Emerson Technology</h1>
+    <p class="lead">Mobile apps, web apps aur digital marketing ke liye ek hi team. Ye kit batati hai ke Emerson kaisa dikhta hai, kaisa bolta hai, aur kin rangon aur fonts ke saath kaam karta hai.</p>
+    <p class="mono" style="color: var(--muted);">Source: emersontechnology.com</p>
+  </div>
+</section>
+
+<!-- 1. BRAND ESSENCE -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow">01 · Brand Essence</p>
+    <h2>Hum digital products banate hain jo business ko aage le jaayein</h2>
+    <p class="lead">Emerson ka kaam sirf software banana nahin, balkay banane ke baad growth tak saath dena hai: design, development, launch, aur marketing/SEO.</p>
+
+    <div class="grid g3" style="margin-top: 28px;">
+      <div class="card">
+        <span class="tag">Tagline</span>
+        <h3 style="margin-top: 12px;">We Build Digital Products That Move Business Forward</h3>
+        <p>Homepage ki main headline. Ye brand ka sab se bara vaada hai.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Positioning</span>
+        <h3 style="margin-top: 12px;">Engineering Digital Excellence</h3>
+        <p>Footer aur About page ka line. Technical maharat par zor.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Promise</span>
+        <h3 style="margin-top: 12px;">Projects on time, on budget</h3>
+        <p>Har project ke liye shafaf delivery system: tasks, time tracking, live budget aur support.</p>
+      </div>
+    </div>
+
+    <div class="grid g3" style="margin-top: 16px;">
+      <div class="card"><h3>Transparent</h3><p>Client wohi dekhta hai jo team dekhti hai. Koi black box nahin.</p></div>
+      <div class="card"><h3>Growth-focused</h3><p>Launch par kaam khatam nahin, SEO aur marketing se results tak jaate hain.</p></div>
+      <div class="card"><h3>One team, one journey</h3><p>UI/UX, web, mobile, marketing aur SEO ek hi team se.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. LOGO -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow">02 · Logo</p>
+    <h2>Primary logo</h2>
+    <p class="lead">Teen rangeen bars ek mark banatay hain, jo mil kar pehle ek jhanda aur phir ek stack ka tasavvur deti hain. Wordmark "Emerson" dark grey mein hai.</p>
+
+    <div class="grid g2" style="margin-top: 24px;">
+      <div class="card" style="display:flex; align-items:center; justify-content:center; min-height: 200px; background:#fff;">
+        <svg width="300" height="75" viewBox="0 0 360 90" role="img" aria-label="Emerson logo on white">
+          <rect x="0" y="0" width="64" height="26" fill="#F5A800"/>
+          <rect x="0" y="32" width="48" height="26" fill="#0E9E56"/>
+          <rect x="0" y="64" width="64" height="26" fill="#0064C8"/>
+          <text x="76" y="78" font-family="Inter, Arial, sans-serif" font-size="74" font-weight="700" fill="#444" letter-spacing="-1">Emerson</text>
+        </svg>
+      </div>
+      <div class="card" style="display:flex; align-items:center; justify-content:center; min-height: 200px; background:#1C232D;">
+        <svg width="300" height="75" viewBox="0 0 360 90" role="img" aria-label="Emerson logo on dark">
+          <rect x="0" y="0" width="64" height="26" fill="#F5A800"/>
+          <rect x="0" y="32" width="48" height="26" fill="#0E9E56"/>
+          <rect x="0" y="64" width="64" height="26" fill="#0064C8"/>
+          <text x="76" y="78" font-family="Inter, Arial, sans-serif" font-size="74" font-weight="700" fill="#FFFFFF" letter-spacing="-1">Emerson</text>
+        </svg>
+      </div>
+    </div>
+
+    <div class="grid g2" style="margin-top: 16px;">
+      <div class="card">
+        <h3>Mark (icon) akela</h3>
+        <p>Chhoti jagah ke liye (favicon, app icon, social avatar). Teen bars ko dobara arrange na karein.</p>
+        <svg width="72" height="72" viewBox="0 0 64 90" role="img" aria-label="Emerson mark">
+          <rect x="0" y="0" width="64" height="26" fill="#F5A800"/>
+          <rect x="0" y="32" width="48" height="26" fill="#0E9E56"/>
+          <rect x="0" y="64" width="64" height="26" fill="#0064C8"/>
+        </svg>
+      </div>
+      <div class="card">
+        <h3>Clear space aur minimum size</h3>
+        <p>Logo ke chaaron taraf kam az kam ek bar ki height jitni khaali jagah rakhein. Digital par minimum width 120px, print par 30mm.</p>
+        <p class="mono">Clear space = height of one bar</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: 16px;">
+      <h3>Logo ke saath kya karein / na karein</h3>
+      <table>
+        <tr><td class="do">DO</td><td>Sirf saaf (solid) background par use karein: white ya dark ink (#1C232D).</td></tr>
+        <tr><td class="do">DO</td><td>Logo ko proportion mein scale karein.</td></tr>
+        <tr><td class="dont">DON'T</td><td>Stretch ya squash na karein.</td></tr>
+        <tr><td class="dont">DON'T</td><td>Bars ke rang change na karein ya naye rang na dalein.</td></tr>
+        <tr><td class="dont">DON'T</td><td>Bars ko ghuma kar ya tilt karke na dikhayein.</td></tr>
+        <tr><td class="dont">DON'T</td><td>Wordmark par shadow, outline ya gradient na lagayein.</td></tr>
+      </table>
+    </div>
+    <p style="margin-top: 12px;"><em>Note:</em> Ye SVG recreation hai. Final production ke liye Emerson ki original vector file (SVG/AI) use karein.</p>
+  </div>
+</section>
+
+<!-- 3. COLORS -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow">03 · Colors</p>
+    <h2>Color palette</h2>
+    <p class="lead">Primary blue trust aur tech ka rang hai. Green growth ko dikhata hai, aur amber energy aur warmth deta hai. Background warm off-white hai, jo sakht white se naram lagta hai.</p>
+
+    <div class="grid g3" style="margin-top: 24px;">
+      <div class="card" style="padding:0; overflow:hidden;">
+        <div style="height:120px; background:#0064C8;"></div>
+        <div style="padding:16px;">
+          <h3>Primary Blue</h3>
+          <p class="mono">HEX #0064C8<br/>RGB 0, 100, 200</p>
+          <p>Buttons, links, active states, focus ring. Sab se zyada istemal.</p>
+        </div>
+      </div>
+      <div class="card" style="padding:0; overflow:hidden;">
+        <div style="height:120px; background:#0E9E56;"></div>
+        <div style="padding:16px;">
+          <h3>Growth Green</h3>
+          <p class="mono">HEX #0E9E56<br/>RGB 14, 158, 86</p>
+          <p>Success, active status, growth charts, logo ka green bar.</p>
+        </div>
+      </div>
+      <div class="card" style="padding:0; overflow:hidden;">
+        <div style="height:120px; background:#F5A800;"></div>
+        <div style="padding:16px;">
+          <h3>Energy Amber</h3>
+          <p class="mono">HEX #F5A800<br/>RGB 245, 168, 0</p>
+          <p>Highlights, warnings, logo ka pehla bar. Chhota hissa, zyada nahin.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid g3" style="margin-top: 16px;">
+      <div class="card" style="padding:0; overflow:hidden;">
+        <div style="height:80px; background:#1C232D;"></div>
+        <div style="padding:14px;"><h3>Ink (text)</h3><p class="mono">#1C232D</p></div>
+      </div>
+      <div class="card" style="padding:0; overflow:hidden;">
+        <div style="height:80px; background:#5B6672;"></div>
+        <div style="padding:14px;"><h3>Muted text</h3><p class="mono">#5B6672</p></div>
+      </div>
+      <div class="card" style="padding:0; overflow:hidden;">
+        <div style="height:80px; background:#E6E8E4;"></div>
+        <div style="padding:14px;"><h3>Border</h3><p class="mono">#E6E8E4</p></div>
+      </div>
+    </div>
+
+    <div class="grid g4" style="margin-top: 16px;">
+      <div class="card" style="padding:0; overflow:hidden;"><div style="height:60px; background:#FDFDFB; border-bottom:1px solid #E6E8E4;"></div><div style="padding:12px;"><strong>Background</strong><p class="mono" style="margin:4px 0 0">#FDFDFB</p></div></div>
+      <div class="card" style="padding:0; overflow:hidden;"><div style="height:60px; background:#FEF4DD;"></div><div style="padding:12px;"><strong>Cream accent</strong><p class="mono" style="margin:4px 0 0">#FEF4DD / #7A5200</p></div></div>
+      <div class="card" style="padding:0; overflow:hidden;"><div style="height:60px; background:#DC2626;"></div><div style="padding:12px;"><strong>Danger</strong><p class="mono" style="margin:4px 0 0">#DC2626</p></div></div>
+      <div class="card" style="padding:0; overflow:hidden;"><div style="height:60px; background:#0A56A8;"></div><div style="padding:12px;"><strong>Blue dark (hover)</strong><p class="mono" style="margin:4px 0 0">#0A56A8</p></div></div>
+    </div>
+
+    <div class="card" style="margin-top: 16px;">
+      <h3>Chart / data colors</h3>
+      <p>Charts mein is order se istemal karein: Blue, Amber, Green, Purple (#7C3AED), Rose (#E11D48).</p>
+      <div style="display:flex; gap:8px; margin-top:8px;">
+        <span style="width:60px;height:24px;border-radius:6px;background:#0064C8"></span>
+        <span style="width:60px;height:24px;border-radius:6px;background:#F5A800"></span>
+        <span style="width:60px;height:24px;border-radius:6px;background:#0E9E56"></span>
+        <span style="width:60px;height:24px;border-radius:6px;background:#7C3AED"></span>
+        <span style="width:60px;height:24px;border-radius:6px;background:#E11D48"></span>
+      </div>
+    </div>
+
+    <p style="margin-top:12px;"><em>Note:</em> Ye values emersontechnology.com ke CSS se li gayi hain. Logo ke rang screenshot se approximate hain, lekin yahan ke hex values site ke saath match karti hain.</p>
+  </div>
+</section>
+
+<!-- 4. TYPOGRAPHY -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow">04 · Typography</p>
+    <h2>Inter, sab ke liye</h2>
+    <p class="lead">Website ka font <strong>Inter</strong> hai. Ye saaf, modern aur screens par padhne mein aasan hai. Monospace font sirf code aur data numbers ke liye.</p>
+
+    <div class="grid g2" style="margin-top: 24px;">
+      <div class="card">
+        <p class="mono" style="margin:0 0 8px;">Heading · Inter Bold 700</p>
+        <div style="font-size:40px; font-weight:700; letter-spacing:-0.02em; line-height:1.1;">Aa Bb Cc 123</div>
+        <p style="margin-top:12px; color:var(--ink); font-weight:700; font-size:26px; letter-spacing:-0.01em;">We Build Digital Products</p>
+      </div>
+      <div class="card">
+        <p class="mono" style="margin:0 0 8px;">Body · Inter Regular 400</p>
+        <div style="font-size:40px; font-weight:400;">Aa Bb Cc 123</div>
+        <p style="margin-top:12px; color:var(--ink);">Ek saaf body text jo padhne mein aasan ho aur line height 1.6 par ho.</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <table>
+        <tr><th>Level</th><th>Size</th><th>Weight</th><th>Example</th></tr>
+        <tr><td>H1 (hero)</td><td>52px / 1.1</td><td>700</td><td style="font-size:30px;font-weight:700;">We Build Digital Products</td></tr>
+        <tr><td>H2 (section)</td><td>34px / 1.2</td><td>700</td><td style="font-size:24px;font-weight:700;">Five crafts, one journey</td></tr>
+        <tr><td>H3 (card)</td><td>18px / 1.4</td><td>600</td><td style="font-size:18px;font-weight:600;">Live budgets</td></tr>
+        <tr><td>Body</td><td>16px / 1.6</td><td>400</td><td>Every hour logged and visible.</td></tr>
+        <tr><td>Eyebrow</td><td>12px, UPPERCASE, +0.14em</td><td>700</td><td style="font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#0064C8;font-weight:700;">01 · Brand Essence</td></tr>
+        <tr><td>Data / code</td><td>13px</td><td>400</td><td><code>PKR 12,400 / 15k</code></td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- 5. UI ELEMENTS -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow">05 · UI Elements</p>
+    <h2>Buttons, cards aur badges</h2>
+    <p class="lead">Corners mein 12px radius, halke borders, aur bohat khaali jagah. Buttons ka style ek jaisa rakhein.</p>
+
+    <div class="card" style="margin-top:24px; display:flex; flex-wrap:wrap; gap:14px; align-items:center;">
+      <button style="background:#0064C8;color:#fff;border:0;border-radius:10px;padding:12px 20px;font-weight:600;font-size:15px;">Start Your Project</button>
+      <button style="background:#fff;color:#1C232D;border:1px solid #E6E8E4;border-radius:10px;padding:12px 20px;font-weight:600;font-size:15px;">Explore Services</button>
+      <button style="background:#0E9E56;color:#fff;border:0;border-radius:10px;padding:12px 20px;font-weight:600;font-size:15px;">Get Free Consultation</button>
+      <button style="background:#FEF4DD;color:#7A5200;border:0;border-radius:10px;padding:12px 20px;font-weight:600;font-size:15px;">Highlight</button>
+      <button style="background:#DC2626;color:#fff;border:0;border-radius:10px;padding:12px 20px;font-weight:600;font-size:15px;">Delete</button>
+    </div>
+
+    <div class="grid g3" style="margin-top:16px;">
+      <div class="card">
+        <span style="background:#0E9E56;color:#fff;font-size:12px;padding:4px 10px;border-radius:999px;font-weight:600;">● Online</span>
+        <span style="background:#FEF4DD;color:#7A5200;font-size:12px;padding:4px 10px;border-radius:999px;font-weight:600;margin-left:6px;">On budget</span>
+        <p style="margin-top:12px;">Status badges: green (active/success), cream (warning/highlight).</p>
+      </div>
+      <div class="card">
+        <p class="mono" style="margin:0 0 8px;">Sprint 6 · Analytics</p>
+        <strong>Set up reporting dashboard</strong>
+        <p style="margin-top:8px;">Cards: white background, 1px border #E6E8E4, radius 12px.</p>
+      </div>
+      <div class="card">
+        <div style="height:8px; background:#E6E8E4; border-radius:999px; overflow:hidden;"><div style="width:65%; height:100%; background:#0064C8;"></div></div>
+        <p style="margin-top:12px;">Progress bar: primary blue par. "Logged 26h / 40h" jaisa data.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. VOICE AND TONE -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow">06 · Voice & Tone</p>
+    <h2>Kaisa bolna hai</h2>
+    <p class="lead">Emerson direct, confident aur shafaf bolta hai. Bada-bada wada nahin, lekin numbers aur process ke saath sach.</p>
+
+    <div class="grid g2" style="margin-top:24px;">
+      <div class="card">
+        <h3>Hum ye hain</h3>
+        <ul style="color:var(--muted); padding-left:18px;">
+          <li>Confident, lekin mughrur nahin</li>
+          <li>Simple words, technical jargon kam</li>
+          <li>Action-oriented (Start, Explore, Book)</li>
+          <li>Client ko partner samajhna</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Hum ye nahin hain</h3>
+        <ul style="color:var(--muted); padding-left:18px;">
+          <li>Khokhla hype ("world's best" jaisi baatein bina saboot)</li>
+          <li>Bhaari corporate language</li>
+          <li>Darane wale sales lines</li>
+          <li>Emoji ka zyada istemal (sirf chhota mauqa par)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <h3>Headline misalein</h3>
+      <table>
+        <tr><th>Mauqa</th><th>Emerson style</th></tr>
+        <tr><td>Hero</td><td>We Build Digital Products That Move Business Forward</td></tr>
+        <tr><td>Section</td><td>Projects delivered on time & on budget</td></tr>
+        <tr><td>CTA</td><td>Book a free strategy call: no commitments, just clarity.</td></tr>
+        <tr><td>Support</td><td>A dedicated team that answers in minutes, not days.</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- 7. KEY NUMBERS AND SERVICES -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow">07 · Proof Points & Services</p>
+    <h2>Website par jo numbers aur services hain</h2>
+    <p class="lead">Ye numbers website ke mutabiq hain. Brand materials mein istemal se pehle inhein Emerson ki team se confirm karein.</p>
+
+    <div class="grid g4" style="margin-top:24px;">
+      <div class="card"><div style="font-size:34px;font-weight:700;color:#0064C8;">500+</div><p>Projects delivered, 3 continents mein</p></div>
+      <div class="card"><div style="font-size:34px;font-weight:700;color:#0E9E56;">4.9★</div><p>Client rating, 78+ partners</p></div>
+      <div class="card"><div style="font-size:34px;font-weight:700;color:#F5A800;">7+</div><p>Saal ka craft, day one se</p></div>
+      <div class="card"><div style="font-size:34px;font-weight:700;color:#1C232D;">98%</div><p>On-time delivery, active projects</p></div>
+    </div>
+
+    <div class="grid g5" style="margin-top:16px;">
+      <div class="card"><h3>UI/UX Design</h3><p>Research, wireframes, design systems</p></div>
+      <div class="card"><h3>Web Apps</h3><p>SaaS platforms, dashboards, portals</p></div>
+      <div class="card"><h3>Mobile Apps</h3><p>Native aur cross-platform</p></div>
+      <div class="card"><h3>Digital Marketing</h3><p>Full-funnel campaigns</p></div>
+      <div class="card"><h3>SEO</h3><p>Technical aur content SEO</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. DIGITAL APPLICATION -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow">08 · Digital Application</p>
+    <h2>Website aur social par brand kaise lagega</h2>
+    <div class="grid g2" style="margin-top:24px;">
+      <div class="card">
+        <h3>Website / app</h3>
+        <ul style="color:var(--muted); padding-left:18px;">
+          <li>Background: #FDFDFB, text: #1C232D</li>
+          <li>Primary buttons: #0064C8, white text</li>
+          <li>Theme color meta tag: <code>#0064C8</code></li>
+          <li>Cards: white, border #E6E8E4, radius 12px</li>
+          <li>Favicon: teen bars wala mark</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Social media</h3>
+        <ul style="color:var(--muted); padding-left:18px;">
+          <li>Profile picture: sirf mark (teen bars), white ya blue background par</li>
+          <li>Cover/banner: white background, logo left, headline right</li>
+          <li>Post mein 1 primary color + 1 accent (green ya amber)</li>
+          <li>OG image: 1200 x 630 (site ka standard)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 9. CHECKLIST -->
+<section>
+  <div class="wrap">
+    <p class="eyebrow">09 · Quick Checklist</p>
+    <h2>Har asset se pehle check karein</h2>
+    <div class="card" style="margin-top:16px;">
+      <table>
+        <tr><td>☐</td><td>Logo original file se hai aur stretch nahin hua</td></tr>
+        <tr><td>☐</td><td>Clear space ka rule follow hua</td></tr>
+        <tr><td>☐</td><td>Sirf brand colors istemal hue (blue, green, amber, ink)</td></tr>
+        <tr><td>☐</td><td>Font Inter hai (ya fallback sans-serif)</td></tr>
+        <tr><td>☐</td><td>Text contrast kaafi hai (WCAG AA, khaas kar chhote text par)</td></tr>
+        <tr><td>☐</td><td>Tagline sahi likhi gayi hai</td></tr>
+        <tr><td>☐</td><td>Numbers / claims confirm kiye gaye hain</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section style="background:#fff;">
+  <div class="wrap" style="text-align:center;">
+    <p class="eyebrow">Contact</p>
+    <p class="mono" style="color:var(--ink);">emersontechnology.com/contact</p>
+    <p class="mono" style="font-size:12px;">Brand Kit v1.0 · Prepared from the public website</p>
+  </div>
+</section>
+
+</body>
+</html>

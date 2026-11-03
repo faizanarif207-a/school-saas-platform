@@ -1,5 +1,7 @@
 // src/lib/db.ts
-// Prisma client optimized for Vercel serverless + Supabase PgBouncer
+// Prisma client — lazy initialization to avoid build-time errors
+// The client is only created when first accessed at runtime,
+// not at module evaluation time (which happens during Next.js build).
 
 import { PrismaClient } from "@prisma/client";
 import { config as dotenvConfig } from "dotenv";
@@ -18,17 +20,25 @@ if (!process.env.DATABASE_URL || process.env.DATABASE_URL.startsWith("file:")) {
   }
 }
 
-function createPrismaClient() {
+function createPrismaClient(): PrismaClient {
   return new PrismaClient({
     log: process.env.NODE_ENV === "development" ? ["error", "warn"] : ["error"],
-    datasources: {
-      db: {
-        url: process.env.DATABASE_URL,
-      },
-    },
   });
 }
 
-export const db = globalForPrisma.prisma ?? createPrismaClient();
+function getClient(): PrismaClient {
+  if (!globalForPrisma.prisma) {
+    globalForPrisma.prisma = createPrismaClient();
+  }
+  return globalForPrisma.prisma;
+}
 
-if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = db;
+// Lazy proxy: only instantiates PrismaClient when a property is accessed
+// This avoids "Invalid value undefined for datasource" during Next.js build
+export const db = new Proxy({} as PrismaClient, {
+  get(_, prop) {
+    const client = getClient();
+    const value = Reflect.get(client, prop, client);
+    return typeof value === "function" ? value.bind(client) : value;
+  },
+}) as PrismaClient;

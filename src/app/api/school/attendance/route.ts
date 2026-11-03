@@ -3,6 +3,9 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { getSession } from "@/lib/auth";
 
+// Force dynamic — required for API routes using Prisma
+export const dynamic = "force-dynamic"
+
 // GET — list attendance for a section on a date
 export async function GET(req: Request) {
   const user = await getSession();

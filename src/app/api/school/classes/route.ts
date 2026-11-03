@@ -3,6 +3,9 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { getSession } from "@/lib/auth";
 
+// Force dynamic — required for API routes using Prisma
+export const dynamic = "force-dynamic"
+
 export async function GET() {
   const user = await getSession();
   if (!user || user.role !== "SCHOOL_ADMIN" || !user.schoolId) {

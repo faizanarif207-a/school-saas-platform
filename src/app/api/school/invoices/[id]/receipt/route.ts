@@ -4,6 +4,9 @@ import { db } from "@/lib/db";
 import { getSession } from "@/lib/auth";
 import { format } from "date-fns";
 
+// Force dynamic — required for API routes using Prisma
+export const dynamic = "force-dynamic"
+
 // GET — return receipt HTML for printing/PDF
 export async function GET(
   req: NextRequest,

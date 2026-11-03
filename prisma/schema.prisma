@@ -41,12 +41,16 @@ model School {
   plan        PlatformPlan @relation(fields: [planId], references: [id])
   status      String   @default("trial") // trial, active, suspended, deleted
   studentCount Int     @default(0)
+  schoolCode  String?  // short code for Admission ID: e.g., BSS, TCS
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
   subscriptions Subscription[]
   users        User[]
   auditLogs    AuditLog[]
+  settings     SchoolSettings?
+  notices      Notice[]
+  exams        Exam[]
 
   @@index([planId])
   @@index([status])
@@ -101,7 +105,11 @@ model User {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  auditLogs AuditLog[]
+  auditLogs      AuditLog[]
+  notices        Notice[]
+  leaveRequests  LeaveRequest[]
+  approvedLeaves LeaveRequest[] @relation("LeaveApprover")
+  parentStudents ParentStudent[]
 
   @@index([schoolId])
   @@index([role])
@@ -132,6 +140,9 @@ model AcademicYear {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  enrollments Enrollment[]
+  exams       Exam[]
+
   @@index([schoolId])
 }
 
@@ -145,6 +156,7 @@ model Class {
 
   sections  Section[]
   feePlans  FeePlan[]
+  examMarks ExamMark[] @relation("ExamMarkClass")
 
   @@index([schoolId])
 }
@@ -159,6 +171,7 @@ model Section {
 
   class       Class        @relation(fields: [classId], references: [id], onDelete: Cascade)
   enrollments Enrollment[]
+  examMarks   ExamMark[]   @relation("ExamMarkSection")
 
   @@index([classId])
 }
@@ -171,12 +184,15 @@ model Subject {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  examMarks ExamMark[]
+
   @@index([schoolId])
 }
 
 model Student {
   id          String   @id @default(cuid())
   schoolId    String
+  admissionId String?  @unique
   name        String
   fatherName  String?
   dob         DateTime?
@@ -191,6 +207,8 @@ model Student {
   attendances Attendance[]
   invoices    Invoice[]
   guardians   Guardian[]
+  parents     ParentStudent[] @relation("ParentStudents")
+  examMarks   ExamMark[]
 
   @@index([schoolId])
 }
@@ -206,6 +224,7 @@ model Enrollment {
 
   student        Student       @relation(fields: [studentId], references: [id], onDelete: Cascade)
   section        Section       @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  academicYear   AcademicYear  @relation(fields: [academicYearId], references: [id], onDelete: Cascade)
   attendances    Attendance[]
   invoices       Invoice[]
 
@@ -298,4 +317,128 @@ model Payment {
   invoice   Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
 
   @@index([invoiceId])
+}
+
+// ============================================
+// PHASE R2 — EXAMS, MARKS, PARENT-STUDENT LINK
+// ============================================
+
+model Exam {
+  id           String   @id @default(cuid())
+  schoolId     String
+  academicYearId String
+  name         String   // Mid-Term, Final, Monthly Test 1
+  term         String   // mid_term, final, monthly
+  startDate    DateTime
+  endDate      DateTime
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  school        School    @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  academicYear  AcademicYear @relation(fields: [academicYearId], references: [id], onDelete: Cascade)
+  marks        ExamMark[]
+
+  @@index([schoolId])
+  @@index([academicYearId])
+}
+
+model ExamMark {
+  id           String   @id @default(cuid())
+  examId       String
+  studentId    String
+  subjectId    String
+  classId      String
+  sectionId    String
+  marks        Int      // obtained
+  totalMarks   Int      // out of
+  grade        String?  // A+, A, B, C, D, F
+  remarks      String?
+  enteredBy    String
+  status       String   @default("submitted") // draft, submitted, approved
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  exam     Exam     @relation(fields: [examId], references: [id], onDelete: Cascade)
+  student  Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  subject  Subject  @relation(fields: [subjectId], references: [id])
+  class    Class    @relation("ExamMarkClass", fields: [classId], references: [id])
+  section  Section  @relation("ExamMarkSection", fields: [sectionId], references: [id])
+
+  @@unique([examId, studentId, subjectId])
+  @@index([examId])
+  @@index([studentId])
+  @@index([sectionId])
+}
+
+model ParentStudent {
+  parentId    String
+  studentId   String
+  relation    String   @default("father") // father, mother, guardian
+  createdAt   DateTime @default(now())
+
+  parent   User     @relation(fields: [parentId], references: [id], onDelete: Cascade)
+  student  Student  @relation("ParentStudents", fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@id([parentId, studentId])
+  @@index([studentId])
+}
+
+// ============================================
+// PHASE 3 — SCHOOL SETTINGS, NOTICES, LEAVES
+// ============================================
+
+model SchoolSettings {
+  schoolId                  String   @id
+  defaultersReminderDays    Int      @default(5)
+  defaultersLateFee         Int      @default(0)
+  defaultersPortalBlockDays Int      @default(30)
+  defaultersSuspendDays     Int      @default(60)
+  smsEnabled                Boolean  @default(false)
+  whatsappEnabled           Boolean  @default(false)
+  studentLoginMinClass      String   @default("Class 6")
+  createdAt                 DateTime @default(now())
+  updatedAt                 DateTime @updatedAt
+
+  school   School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+}
+
+model Notice {
+  id          String   @id @default(cuid())
+  schoolId    String
+  postedBy    String
+  title       String
+  body        String
+  noticeType  String   @default("school_wide") // school_wide, branch_wide, class_specific
+  classId     String?
+  sendSms     Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  poster    User     @relation(fields: [postedBy], references: [id])
+
+  @@index([schoolId])
+  @@index([createdAt])
+}
+
+model LeaveRequest {
+  id              String   @id @default(cuid())
+  userId          String
+  schoolId        String
+  startDate       DateTime
+  endDate         DateTime
+  type            String   // casual, sick, emergency, maternity
+  reason          String
+  status          String   @default("pending") // pending, approved, rejected
+  approvedBy      String?
+  approverComment String?
+  approvedAt      DateTime?
+  createdAt       DateTime @default(now())
+
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  approver   User?    @relation("LeaveApprover", fields: [approvedBy], references: [id])
+
+  @@index([userId])
+  @@index([schoolId])
+  @@index([status])
 }

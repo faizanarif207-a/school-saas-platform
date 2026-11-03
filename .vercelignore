@@ -1,0 +1,17 @@
+# Files to exclude from Vercel deployments
+.env
+.env.local
+.env.*.local
+.vercel
+node_modules
+.next
+db/*.db
+db/*.db-journal
+*.log
+dev.log
+server.log
+upload/
+download/
+scripts/school-saas-diagrams/
+scripts/school-saas-dashboards/
+tests/

@@ -143,7 +143,8 @@ model Class {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  sections Section[]
+  sections  Section[]
+  feePlans  FeePlan[]
 
   @@index([schoolId])
 }
@@ -156,7 +157,8 @@ model Section {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  class     Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+  class       Class        @relation(fields: [classId], references: [id], onDelete: Cascade)
+  enrollments Enrollment[]
 
   @@index([classId])
 }
@@ -188,6 +190,7 @@ model Student {
   enrollments Enrollment[]
   attendances Attendance[]
   invoices    Invoice[]
+  guardians   Guardian[]
 
   @@index([schoolId])
 }
@@ -202,6 +205,7 @@ model Enrollment {
   updatedAt      DateTime @updatedAt
 
   student        Student       @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  section        Section       @relation(fields: [sectionId], references: [id], onDelete: Cascade)
   attendances    Attendance[]
   invoices       Invoice[]
 
@@ -218,6 +222,8 @@ model Guardian {
   relation String? // father, mother, guardian
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  student  Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
   @@index([studentId])
 }
@@ -253,6 +259,7 @@ model FeePlan {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  class    Class?  @relation(fields: [classId], references: [id])
   invoices Invoice[]
 
   @@index([schoolId])

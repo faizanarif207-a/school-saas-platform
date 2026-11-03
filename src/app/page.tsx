@@ -7,5 +7,8 @@ export default async function Home() {
   if (user?.role === "SUPER_ADMIN") {
     redirect("/admin");
   }
+  if (user?.role === "SCHOOL_ADMIN" && user.schoolId) {
+    redirect("/school");
+  }
   redirect("/login");
 }

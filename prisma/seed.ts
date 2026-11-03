@@ -1,6 +1,7 @@
 // prisma/seed.ts
 // Seed default platform plans and a Super Admin user
 
+import 'dotenv/config'
 import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 

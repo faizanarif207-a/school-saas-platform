@@ -1,10 +1,11 @@
-// src/components/emerson-logo.tsx
-// Emerson Technology brand mark + wordmark
+"use client";
+
+import { useTheme } from "next-themes";
 
 type LogoProps = {
   size?: number;
   showWordmark?: boolean;
-  variant?: "light" | "dark"; // text color
+  variant?: "light" | "dark";
   className?: string;
 };
 
@@ -28,10 +29,13 @@ export function EmersonMark({ size = 32, className = "" }: { size?: number; clas
 export function EmersonLogo({
   size = 32,
   showWordmark = true,
-  variant = "light",
+  variant,
   className = "",
 }: LogoProps) {
-  const textColor = variant === "dark" ? "#FFFFFF" : "#1C232D";
+  const { theme } = useTheme();
+  // Auto-detect: if variant not specified, use theme
+  const isDark = variant === "dark" || (theme === "dark" && !variant);
+  const textColor = isDark ? "#F1F5F9" : "#1C232D";
   const wordmarkSize = size * 0.95;
 
   return (

@@ -107,8 +107,8 @@ export default async function HomePage() {
               {/* Subtitle */}
               <p className="mt-8 text-lg lg:text-xl text-muted-foreground max-w-2xl leading-relaxed">
                 Manage students, fees, attendance, and parents — all in one
-                platform. Projects on time, on budget. Built for Pakistani
-                schools by <span className="font-semibold text-foreground">Emerson Technology</span>.
+                platform. Projects on time, on budget. Built by{" "}
+                <span className="font-semibold text-foreground">Emerson Technology</span>.
               </p>
 
               {/* CTAs */}

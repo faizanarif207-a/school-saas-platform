@@ -46,10 +46,15 @@ export function SuperAdminSidebar() {
 
   return (
     <aside className="w-64 bg-sidebar border-r border-sidebar-border flex flex-col h-screen sticky top-0">
+      {/* Role-specific top accent bar — Super Admin = Blue */}
+      <div className="h-1.5 bg-gradient-to-r from-blue-500 to-blue-700" />
       {/* Logo */}
       <div className="px-5 py-5 border-b border-sidebar-border">
-        <EmersonLogo size={22} variant="light" />
-        <div className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground font-bold mt-2 pl-1">
+        <div className="flex items-center justify-between">
+          <EmersonLogo size={22} variant="light" />
+          <span className="text-lg">👑</span>
+        </div>
+        <div className="text-[10px] uppercase tracking-[0.14em] text-blue-600 dark:text-blue-400 font-bold mt-2 pl-1">
           Platform Admin
         </div>
       </div>

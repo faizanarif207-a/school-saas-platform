@@ -52,9 +52,14 @@ export function ParentSidebar({ parentName }: { parentName: string }) {
 
   return (
     <aside className="w-64 bg-sidebar border-r border-sidebar-border flex flex-col h-screen sticky top-0">
+      {/* Role-specific top accent bar — Parent = Pink */}
+      <div className="h-1.5 bg-gradient-to-r from-pink-500 to-pink-700" />
       <div className="px-5 py-5 border-b border-sidebar-border">
-        <EmersonLogo size={22} variant="light" />
-        <div className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground font-bold mt-2 pl-1">
+        <div className="flex items-center justify-between">
+          <EmersonLogo size={22} variant="light" />
+          <span className="text-lg">👨‍👩‍👧</span>
+        </div>
+        <div className="text-[10px] uppercase tracking-[0.14em] text-pink-600 dark:text-pink-400 font-bold mt-2 pl-1">
           Parent Portal
         </div>
         <div className="text-xs text-foreground/70 font-medium mt-1 pl-1 truncate">

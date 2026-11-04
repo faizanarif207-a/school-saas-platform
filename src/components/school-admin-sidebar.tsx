@@ -60,10 +60,15 @@ export function SchoolAdminSidebar({ schoolName }: { schoolName: string }) {
 
   return (
     <aside className="w-64 bg-sidebar border-r border-sidebar-border flex flex-col h-screen sticky top-0">
+      {/* Role-specific top accent bar */}
+      <div className="h-1.5 bg-gradient-to-r from-purple-500 to-purple-700" />
       <div className="px-5 py-5 border-b border-sidebar-border">
-        <EmersonLogo size={22} variant="light" />
-        <div className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground font-bold mt-2 pl-1">
-          School Admin
+        <div className="flex items-center justify-between">
+          <EmersonLogo size={22} variant="light" />
+          <span className="text-lg">🏫</span>
+        </div>
+        <div className="text-[10px] uppercase tracking-[0.14em] text-purple-600 dark:text-purple-400 font-bold mt-2 pl-1">
+          School Owner
         </div>
         <div className="text-xs text-foreground/70 font-medium mt-1 pl-1 truncate">
           {schoolName}

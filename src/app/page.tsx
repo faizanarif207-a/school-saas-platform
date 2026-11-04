@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { EmersonMark } from "@/components/emerson-logo";
+import { SchoolFloatingIcons } from "@/components/floating-school-icons";
 import { getSession } from "@/lib/auth";
 import {
   Users,
@@ -126,6 +127,7 @@ export default async function HomePage() {
         {/* Hero */}
         <section className="relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-background to-accent/20" />
+          <SchoolFloatingIcons />
           <div className="absolute top-0 right-0 w-96 h-96 bg-primary/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
           <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent/30 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
 

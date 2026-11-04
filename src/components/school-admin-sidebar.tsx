@@ -16,6 +16,7 @@ import {
   Bell,
   Building2,
   UserPlus,
+  ShieldCheck,
 } from "lucide-react";
 
 const navSections = [
@@ -35,13 +36,16 @@ const navSections = [
     items: [
       { name: "Students", href: "/school/students", icon: Users },
       { name: "Attendance", href: "/school/attendance", icon: CalendarCheck },
+      { name: "Principal", href: "/school/principal", icon: ShieldCheck },
     ],
   },
   {
-    label: "Fees",
+    label: "Fees & Admissions",
     items: [
       { name: "Fee Plans", href: "/school/fees", icon: Wallet },
       { name: "Invoices", href: "/school/fees/invoices", icon: Receipt },
+      { name: "Accountant", href: "/school/accountant", icon: Wallet },
+      { name: "Admission CRM", href: "/school/admission", icon: UserPlus },
     ],
   },
 ];

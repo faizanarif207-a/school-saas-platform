@@ -114,6 +114,7 @@ model User {
   approvedLeaves LeaveRequest[] @relation("LeaveApprover")
   parentStudents ParentStudent[]
   branch         Branch?  @relation(fields: [branchId], references: [id], onDelete: SetNull)
+  assignedInquiries Inquiry[] @relation("InquiryAssignee")
 
   @@index([schoolId])
   @@index([role])
@@ -135,9 +136,10 @@ model Branch {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  school   School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-  users    User[]
-  classes  Class[]
+  school    School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  users     User[]
+  classes   Class[]
+  inquiries Inquiry[]
 
   @@index([schoolId])
 }
@@ -455,4 +457,34 @@ model LeaveRequest {
   @@index([userId])
   @@index([schoolId])
   @@index([status])
+}
+
+// ============================================
+// PHASE R4 — ADMISSION CRM (INQUIRY FUNNEL)
+// ============================================
+
+model Inquiry {
+  id           String   @id @default(cuid())
+  schoolId     String
+  branchId     String?
+  parentName   String
+  parentPhone  String
+  studentName  String?
+  desiredClass String?
+  source       String   @default("walk_in") // walk_in, facebook, referral, website, other
+  stage        String   @default("inquired") // inquired, visit, form, interview, admitted, lost
+  notes        String?
+  followUpDate DateTime?
+  followUpAction String?
+  assignedTo   String?
+  convertedStudentId String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  branch       Branch?  @relation(fields: [branchId], references: [id], onDelete: SetNull)
+  assignedUser User?    @relation("InquiryAssignee", fields: [assignedTo], references: [id])
+
+  @@index([schoolId])
+  @@index([stage])
+  @@index([followUpDate])
 }

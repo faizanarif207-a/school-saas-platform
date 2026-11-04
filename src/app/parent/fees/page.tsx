@@ -143,6 +143,14 @@ export default async function ParentFeesPage() {
                           </Badge>
                         </td>
                         <td className="px-6 py-3.5">
+                          {inv.status !== "paid" && (
+                            <a
+                              href={`/parent/payment?invoiceId=${inv.id}`}
+                              className="text-primary hover:underline text-xs font-semibold mr-2"
+                            >
+                              Pay Online
+                            </a>
+                          )}
                           {inv.payments.length > 0 ? (
                             <a
                               href={`/api/school/invoices/${inv.id}/receipt?paymentId=${inv.payments[0].id}`}
@@ -154,7 +162,7 @@ export default async function ParentFeesPage() {
                               PDF
                             </a>
                           ) : (
-                            <span className="text-muted-foreground text-xs">—</span>
+                            inv.status === "paid" && <span className="text-muted-foreground text-xs">—</span>
                           )}
                         </td>
                       </tr>

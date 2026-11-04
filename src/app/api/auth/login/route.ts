@@ -29,7 +29,14 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
       ok: true,
-      user: { id: user.id, email: user.email, name: user.name, role: user.role },
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        subRole: user.subRole || null,
+        branchId: user.branchId || null,
+      },
     });
   } catch (err) {
     console.error("[login] error:", err);

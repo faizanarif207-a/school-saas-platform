@@ -14,7 +14,9 @@ export type SessionUser = {
   email: string;
   name: string | null;
   role: string;
+  subRole?: string | null;
   schoolId: string | null;
+  branchId?: string | null;
 };
 
 export async function hashPassword(password: string): Promise<string> {
@@ -128,6 +130,8 @@ export async function verifyDbUser(
     email: user.email,
     name: user.name,
     role: user.role,
+    subRole: user.subRole,
     schoolId: user.schoolId,
+    branchId: user.branchId,
   };
 }

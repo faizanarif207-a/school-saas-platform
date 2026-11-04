@@ -12,9 +12,10 @@ import {
   CalendarCheck,
   Wallet,
   Receipt,
-  GraduationCap,
   LogOut,
-  Library,
+  Bell,
+  Building2,
+  UserPlus,
 } from "lucide-react";
 
 const navSections = [
@@ -23,6 +24,10 @@ const navSections = [
     items: [
       { name: "Dashboard", href: "/school", icon: LayoutDashboard },
       { name: "Setup", href: "/school/setup", icon: Settings },
+      { name: "Branches", href: "/school/branches", icon: Building2 },
+      { name: "Staff", href: "/school/staff", icon: UserPlus },
+      { name: "Notices", href: "/school/notices", icon: Bell },
+      { name: "Settings", href: "/school/settings", icon: Settings },
     ],
   },
   {

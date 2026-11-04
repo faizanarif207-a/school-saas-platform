@@ -51,6 +51,7 @@ model School {
   settings     SchoolSettings?
   notices      Notice[]
   exams        Exam[]
+  branches     Branch[]
 
   @@index([planId])
   @@index([status])
@@ -97,9 +98,11 @@ model User {
   email         String   @unique
   name          String?
   passwordHash  String
-  role          String   @default("SUPER_ADMIN") // SUPER_ADMIN, SCHOOL_ADMIN, PRINCIPAL, ACCOUNTANT, ADMISSION_OFFICER, TEACHER, PARENT, STUDENT
+  role          String   @default("SUPER_ADMIN") // SUPER_ADMIN, SCHOOL_ADMIN, TEACHER, PARENT, STUDENT
+  subRole       String?  // OWNER, PRINCIPAL, ACCOUNTANT, ADMISSION (only for SCHOOL_ADMIN)
   schoolId      String?
   school        School?  @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  branchId      String?
   isActive      Boolean  @default(true)
   lastLoginAt  DateTime?
   createdAt    DateTime @default(now())
@@ -110,22 +113,31 @@ model User {
   leaveRequests  LeaveRequest[]
   approvedLeaves LeaveRequest[] @relation("LeaveApprover")
   parentStudents ParentStudent[]
+  branch         Branch?  @relation(fields: [branchId], references: [id], onDelete: SetNull)
 
   @@index([schoolId])
   @@index([role])
+  @@index([branchId])
 }
 
 // ============================================
-// SCHOOL CORE (Phase 2 — placeholder)
+// SCHOOL CORE (Phase 3 — branches, classes, etc.)
 // ============================================
 
-model Campus {
+model Branch {
   id        String   @id @default(cuid())
   schoolId  String
-  name      String
+  name      String   // Main Campus, North Campus, etc.
   address   String?
+  city      String?
+  phone     String?
+  isMain    Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  school   School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  users    User[]
+  classes  Class[]
 
   @@index([schoolId])
 }
@@ -149,16 +161,18 @@ model AcademicYear {
 model Class {
   id        String   @id @default(cuid())
   schoolId  String
-  campusId  String?
+  branchId  String?
   name      String   // Class 1, Class 5, etc.
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+  branch    Branch?  @relation(fields: [branchId], references: [id], onDelete: SetNull)
   sections  Section[]
   feePlans  FeePlan[]
   examMarks ExamMark[] @relation("ExamMarkClass")
 
   @@index([schoolId])
+  @@index([branchId])
 }
 
 model Section {

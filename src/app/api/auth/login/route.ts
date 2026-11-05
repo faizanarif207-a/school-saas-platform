@@ -1,6 +1,7 @@
 // src/app/api/auth/login/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { verifyDbUser, setSessionCookie } from "@/lib/auth";
+import { db } from "@/lib/db";
 
 // Force dynamic — required for API routes using Prisma
 export const dynamic = "force-dynamic"
@@ -23,6 +24,20 @@ export async function POST(req: NextRequest) {
         { error: "Invalid credentials or inactive account" },
         { status: 401 }
       );
+    }
+
+    // Check if school is suspended (for school-level users)
+    if (user.schoolId && user.role !== "SUPER_ADMIN") {
+      const school = await db.school.findUnique({
+        where: { id: user.schoolId },
+        select: { status: true, name: true },
+      });
+      if (school?.status === "suspended") {
+        return NextResponse.json(
+          { error: `${school.name} has been suspended. Please contact platform support.` },
+          { status: 403 }
+        );
+      }
     }
 
     await setSessionCookie(user);

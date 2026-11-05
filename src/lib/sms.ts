@@ -1,7 +1,20 @@
 // src/lib/sms.ts
-// SMS notification framework
-// In production: integrate with Twilio or local Pakistani SMS gateway
-// For now: logs to console (audit trail) and records in DB for tracking
+// Real SMS sending via Twilio
+// Works automatically when TWILIO_* env vars are set
+
+import { Twilio } from 'twilio';
+
+let twilioClient: Twilio | null = null;
+
+function getTwilioClient(): Twilio | null {
+  if (twilioClient) return twilioClient;
+  const sid = process.env.TWILIO_ACCOUNT_SID;
+  const token = process.env.TWILIO_AUTH_TOKEN;
+  if (sid && token) {
+    twilioClient = new Twilio(sid, token);
+  }
+  return twilioClient;
+}
 
 export type SmsMessage = {
   to: string;
@@ -10,29 +23,37 @@ export type SmsMessage = {
 };
 
 export async function sendSms(message: SmsMessage): Promise<{ ok: boolean; messageId?: string; error?: string }> {
-  // Check if SMS is enabled (from school settings)
-  // In production, this would call Twilio API or local gateway
-  // For now, just log and return success
+  const client = getTwilioClient();
+  const fromPhone = process.env.TWILIO_FROM_PHONE;
 
-  console.log(`[SMS] To: ${message.to} | Type: ${message.type}`);
-  console.log(`[SMS] Body: ${message.body.substring(0, 100)}${message.body.length > 100 ? "..." : ""}`);
+  if (!client || !fromPhone) {
+    console.log(`[SMS] (no Twilio — logging only) To: ${message.to} | Type: ${message.type}`);
+    console.log(`[SMS] Body: ${message.body.substring(0, 100)}${message.body.length > 100 ? "..." : ""}`);
+    return { ok: true }; // Don't fail the flow
+  }
 
-  // TODO: When ready for production, uncomment and configure:
-  // const accountSid = process.env.TWILIO_ACCOUNT_SID;
-  // const authToken = process.env.TWILIO_AUTH_TOKEN;
-  // const fromPhone = process.env.TWILIO_FROM_PHONE;
-  // if (accountSid && authToken && fromPhone) {
-  //   const client = require("twilio")(accountSid, authToken);
-  //   const result = await client.messages.create({
-  //     body: message.body,
-  //     from: fromPhone,
-  //     to: message.to,
-  //   });
-  //   return { ok: true, messageId: result.sid };
-  // }
+  try {
+    // Format phone number (ensure + prefix)
+    let toPhone = message.to.replace(/\s/g, '').replace(/-/g, '');
+    if (!toPhone.startsWith('+')) {
+      toPhone = '+' + toPhone;
+    }
 
-  return { ok: true, messageId: `mock_${Date.now()}` };
+    const result = await client.messages.create({
+      body: message.body,
+      from: fromPhone,
+      to: toPhone,
+    });
+
+    console.log(`[SMS] Sent to ${toPhone} | ID: ${result.sid}`);
+    return { ok: true, messageId: result.sid };
+  } catch (err: any) {
+    console.error('[SMS] Error:', err.message);
+    return { ok: false, error: err.message };
+  }
 }
+
+// ─── SMS Templates ───
 
 export function formatAttendanceSms(studentName: string, date: string, status: string, schoolName: string): string {
   return `Dear Parent, your child ${studentName} was ${status} on ${date} at ${schoolName}. - SchoolSaaS`;

@@ -1,8 +1,8 @@
 // src/app/api/school/staff/route.ts
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
-import { getSession } from "@/lib/auth";
-import { hashPassword } from "@/lib/auth";
+import { getSession, hashPassword } from "@/lib/auth";
+import { sendEmail, staffInviteEmail } from "@/lib/email";
 import { randomBytes } from "crypto";
 
 export const dynamic = "force-dynamic";
@@ -97,6 +97,19 @@ export async function POST(req: Request) {
       },
     });
 
+    // Send real email invitation
+    const loginUrl = role === "TEACHER"
+      ? `${process.env.AUTH_URL || 'https://school-saas-platform-indol.vercel.app'}/teacher/login`
+      : `${process.env.AUTH_URL || 'https://school-saas-platform-indol.vercel.app'}/school/login`;
+
+    const school = await db.school.findUnique({
+      where: { id: user.schoolId },
+      select: { name: true },
+    });
+
+    const emailHtml = staffInviteEmail(name.trim(), loginUrl, tempPassword, subRole, school?.name || "School");
+    await sendEmail(email.toLowerCase().trim(), `Welcome to ${school?.name || "SchoolSaaS"} — Your Account is Ready`, emailHtml);
+
     return NextResponse.json({
       ok: true,
       staff: {
@@ -104,7 +117,7 @@ export async function POST(req: Request) {
         name: staffUser.name,
         email: staffUser.email,
         subRole,
-        tempPassword, // returned so owner can share with staff
+        tempPassword,
       },
     });
   } catch (err) {

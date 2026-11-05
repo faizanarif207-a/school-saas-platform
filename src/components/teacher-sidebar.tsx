@@ -36,6 +36,7 @@ const navSections = [
     label: "Personal",
     items: [
       { name: "Apply Leave", href: "/teacher/leave", icon: CalendarClock },
+      { name: "My Profile", href: "/teacher/profile", icon: Users },
     ],
   },
 ];

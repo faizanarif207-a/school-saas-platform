@@ -30,6 +30,7 @@ const navSections = [
     items: [
       { name: "Timetable", href: "/student/timetable", icon: CalendarClock },
       { name: "Notices", href: "/student/notices", icon: Bell },
+      { name: "My Profile", href: "/student/profile", icon: CalendarCheck },
     ],
   },
 ];

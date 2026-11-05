@@ -18,6 +18,7 @@ import {
   UserPlus,
   ShieldCheck,
   FileText,
+  User,
 } from "lucide-react";
 
 const navSections = [
@@ -30,6 +31,7 @@ const navSections = [
       { name: "Staff", href: "/school/staff", icon: UserPlus },
       { name: "Notices", href: "/school/notices", icon: Bell },
       { name: "Settings", href: "/school/settings", icon: Settings },
+      { name: "My Profile", href: "/school/profile", icon: User },
     ],
   },
   {

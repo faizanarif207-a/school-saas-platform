@@ -32,6 +32,7 @@ const navSections = [
     label: "System",
     items: [
       { name: "Add School", href: "/admin/schools/new", icon: Plus },
+      { name: "My Profile", href: "/admin/profile", icon: Settings },
     ],
   },
 ];

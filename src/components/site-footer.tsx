@@ -22,6 +22,7 @@ const footerSections = [
   {
     title: "Login As",
     links: [
+      { name: "Sign In (All Roles)", href: "/unified-login" },
       { name: "Super Admin", href: "/login" },
       { name: "School Admin", href: "/school/login" },
       { name: "Teacher", href: "/teacher/login" },

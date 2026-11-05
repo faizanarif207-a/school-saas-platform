@@ -7,7 +7,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import {
   LayoutDashboard,
-  School,
+  School as SchoolIcon,
   Layers,
   DollarSign,
   ScrollText,
@@ -21,17 +21,17 @@ const navSections = [
     label: "Platform",
     items: [
       { name: "Dashboard", href: "/admin", icon: LayoutDashboard },
-      { name: "Schools", href: "/admin/schools", icon: School, badge: "all" },
+      { name: "Schools", href: "/admin/schools", icon: SchoolIcon, count: "all" },
       { name: "Plans", href: "/admin/plans", icon: Layers },
-      { name: "Billing", href: "/admin/billing", icon: DollarSign, soon: true },
+      { name: "Billing", href: "/admin/billing", icon: DollarSign },
+      { name: "Audit Logs", href: "/admin/audit", icon: ScrollText },
+      { name: "Settings", href: "/admin/settings", icon: Settings },
     ],
   },
   {
     label: "System",
     items: [
       { name: "Add School", href: "/admin/schools/new", icon: Plus },
-      { name: "Audit Logs", href: "/admin/audit", icon: ScrollText, soon: true },
-      { name: "Settings", href: "/admin/settings", icon: Settings, soon: true },
     ],
   },
 ];
@@ -46,9 +46,7 @@ export function SuperAdminSidebar() {
 
   return (
     <aside className="w-64 bg-sidebar border-r border-sidebar-border flex flex-col h-screen sticky top-0">
-      {/* Role-specific top accent bar — Super Admin = Blue */}
       <div className="h-1.5 bg-gradient-to-r from-blue-500 to-blue-700" />
-      {/* Logo */}
       <div className="px-5 py-5 border-b border-sidebar-border">
         <div className="flex items-center justify-between">
           <EmersonLogo size={22} variant="light" />
@@ -59,7 +57,6 @@ export function SuperAdminSidebar() {
         </div>
       </div>
 
-      {/* Nav */}
       <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-6">
         {navSections.map((section) => (
           <div key={section.label}>
@@ -84,14 +81,9 @@ export function SuperAdminSidebar() {
                   >
                     <Icon className="h-4 w-4 shrink-0" />
                     <span>{item.name}</span>
-                    {item.badge && (
+                    {item.count && (
                       <span className="ml-auto text-[10px] text-muted-foreground font-mono">
-                        {item.badge}
-                      </span>
-                    )}
-                    {item.soon && (
-                      <span className="ml-auto text-[9px] uppercase font-bold text-muted-foreground/60">
-                        soon
+                        {item.count}
                       </span>
                     )}
                   </Link>
@@ -102,7 +94,6 @@ export function SuperAdminSidebar() {
         ))}
       </nav>
 
-      {/* Footer */}
       <div className="border-t border-sidebar-border p-3 space-y-2">
         <div className="flex items-center justify-between px-2">
           <span className="text-[10px] text-muted-foreground">Theme</span>

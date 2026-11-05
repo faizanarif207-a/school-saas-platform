@@ -1,4 +1,3 @@
-// src/components/teacher-sidebar.tsx
 "use client";
 
 import Link from "next/link";
@@ -21,7 +20,7 @@ const navSections = [
     label: "My Classes",
     items: [
       { name: "Dashboard", href: "/teacher", icon: LayoutDashboard },
-      { name: "Today's Timetable", href: "/teacher/timetable", icon: CalendarClock, soon: true },
+      { name: "Timetable", href: "/teacher/timetable", icon: CalendarClock },
       { name: "Mark Attendance", href: "/teacher/attendance", icon: CalendarCheck },
       { name: "Enter Marks", href: "/teacher/marks", icon: PenSquare },
     ],
@@ -29,8 +28,8 @@ const navSections = [
   {
     label: "Records",
     items: [
-      { name: "My Students", href: "/teacher/students", icon: Users, soon: true },
-      { name: "Homework", href: "/teacher/homework", icon: FileEdit, soon: true },
+      { name: "My Students", href: "/teacher/students", icon: Users },
+      { name: "Homework", href: "/teacher", icon: FileEdit, soon: true },
     ],
   },
   {
@@ -51,7 +50,6 @@ export function TeacherSidebar({ teacherName }: { teacherName: string }) {
 
   return (
     <aside className="w-64 bg-sidebar border-r border-sidebar-border flex flex-col h-screen sticky top-0">
-      {/* Role-specific top accent bar — Teacher = Cyan */}
       <div className="h-1.5 bg-gradient-to-r from-cyan-500 to-cyan-700" />
       <div className="px-5 py-5 border-b border-sidebar-border">
         <div className="flex items-center justify-between">
@@ -74,9 +72,7 @@ export function TeacherSidebar({ teacherName }: { teacherName: string }) {
             </div>
             <div className="space-y-1">
               {section.items.map((item) => {
-                const active =
-                  pathname === item.href ||
-                  (item.href !== "/teacher" && pathname.startsWith(item.href));
+                const active = pathname === item.href && !item.soon;
                 const Icon = item.icon;
                 return (
                   <Link

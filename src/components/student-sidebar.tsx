@@ -1,4 +1,3 @@
-// src/components/student-sidebar.tsx
 "use client";
 
 import Link from "next/link";
@@ -20,15 +19,15 @@ const navSections = [
     label: "My Account",
     items: [
       { name: "Dashboard", href: "/student", icon: LayoutDashboard },
-      { name: "Attendance", href: "/student", icon: CalendarCheck, soon: true },
-      { name: "Results", href: "/student", icon: Trophy, soon: true },
+      { name: "Attendance", href: "/student/attendance", icon: CalendarCheck },
+      { name: "Results", href: "/student/results", icon: Trophy },
     ],
   },
   {
     label: "School",
     items: [
-      { name: "Timetable", href: "/student", icon: CalendarClock, soon: true },
-      { name: "Notices", href: "/student", icon: Bell, soon: true },
+      { name: "Timetable", href: "/student/timetable", icon: CalendarClock },
+      { name: "Notices", href: "/student/notices", icon: Bell },
     ],
   },
 ];
@@ -43,7 +42,6 @@ export function StudentSidebar({ studentName }: { studentName: string }) {
 
   return (
     <aside className="w-64 bg-sidebar border-r border-sidebar-border flex flex-col h-screen sticky top-0">
-      {/* Role-specific top accent bar — Student = Emerald Green */}
       <div className="h-1.5 bg-gradient-to-r from-emerald-500 to-emerald-700" />
       <div className="px-5 py-5 border-b border-sidebar-border">
         <div className="flex items-center justify-between">
@@ -66,7 +64,7 @@ export function StudentSidebar({ studentName }: { studentName: string }) {
             </div>
             <div className="space-y-1">
               {section.items.map((item) => {
-                const active = pathname === item.href && !item.soon;
+                const active = pathname === item.href;
                 const Icon = item.icon;
                 return (
                   <Link
@@ -80,11 +78,6 @@ export function StudentSidebar({ studentName }: { studentName: string }) {
                   >
                     <Icon className="h-4 w-4 shrink-0" />
                     <span>{item.name}</span>
-                    {item.soon && (
-                      <span className="ml-auto text-[9px] uppercase font-bold text-muted-foreground/60">
-                        soon
-                      </span>
-                    )}
                   </Link>
                 );
               })}

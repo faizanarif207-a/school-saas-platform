@@ -1,4 +1,3 @@
-// src/components/parent-sidebar.tsx
 "use client";
 
 import Link from "next/link";
@@ -23,14 +22,14 @@ const navSections = [
     items: [
       { name: "Dashboard", href: "/parent", icon: LayoutDashboard },
       { name: "Attendance", href: "/parent/attendance", icon: CalendarCheck },
-      { name: "Results", href: "/parent/results", icon: Trophy, soon: true },
+      { name: "Results", href: "/parent/results", icon: Trophy },
     ],
   },
   {
     label: "Fees",
     items: [
       { name: "Fees & Pay", href: "/parent/fees", icon: Wallet },
-      { name: "Receipts", href: "/parent/fees", icon: Receipt, soon: true },
+      { name: "Receipts", href: "/parent/receipts", icon: Receipt },
     ],
   },
   {
@@ -52,7 +51,6 @@ export function ParentSidebar({ parentName }: { parentName: string }) {
 
   return (
     <aside className="w-64 bg-sidebar border-r border-sidebar-border flex flex-col h-screen sticky top-0">
-      {/* Role-specific top accent bar — Parent = Pink */}
       <div className="h-1.5 bg-gradient-to-r from-pink-500 to-pink-700" />
       <div className="px-5 py-5 border-b border-sidebar-border">
         <div className="flex items-center justify-between">
@@ -75,9 +73,7 @@ export function ParentSidebar({ parentName }: { parentName: string }) {
             </div>
             <div className="space-y-1">
               {section.items.map((item) => {
-                const active =
-                  pathname === item.href ||
-                  (item.href !== "/parent" && pathname.startsWith(item.href));
+                const active = pathname === item.href && !item.soon;
                 const Icon = item.icon;
                 return (
                   <Link

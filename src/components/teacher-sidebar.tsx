@@ -29,7 +29,7 @@ const navSections = [
     label: "Records",
     items: [
       { name: "My Students", href: "/teacher/students", icon: Users },
-      { name: "Homework", href: "/teacher", icon: FileEdit, soon: true },
+      { name: "Homework", href: "/teacher/homework", icon: FileEdit },
     ],
   },
   {

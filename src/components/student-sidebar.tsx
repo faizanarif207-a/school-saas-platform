@@ -12,6 +12,7 @@ import {
   CalendarClock,
   Bell,
   LogOut,
+  BookOpen,
 } from "lucide-react";
 
 const navSections = [
@@ -21,6 +22,7 @@ const navSections = [
       { name: "Dashboard", href: "/student", icon: LayoutDashboard },
       { name: "Attendance", href: "/student/attendance", icon: CalendarCheck },
       { name: "Results", href: "/student/results", icon: Trophy },
+      { name: "Homework", href: "/student/homework", icon: BookOpen },
     ],
   },
   {

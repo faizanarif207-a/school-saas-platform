@@ -36,7 +36,7 @@ const navSections = [
     label: "Updates",
     items: [
       { name: "Notices", href: "/parent/notices", icon: Bell },
-      { name: "Apply Leave", href: "/parent", icon: CalendarClock, soon: true },
+      { name: "Apply Leave", href: "/parent/leave", icon: CalendarClock },
     ],
   },
 ];

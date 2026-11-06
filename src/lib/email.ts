@@ -1,38 +1,51 @@
 // src/lib/email.ts
-// Real email sending via Resend
-// Works automatically when RESEND_API_KEY is set in environment
+// Real email sending via Gmail SMTP (using App Password)
+// Works automatically when GMAIL_EMAIL + GMAIL_APP_PASSWORD are set
 
-import { Resend } from 'resend';
+import nodemailer from "nodemailer";
 
-const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
+let transporter: nodemailer.Transporter | null = null;
 
-const FROM_EMAIL = process.env.EMAIL_FROM || 'SchoolSaaS <noreply@resend.dev>';
+function getTransporter(): nodemailer.Transporter | null {
+  if (transporter) return transporter;
+  const email = process.env.GMAIL_EMAIL;
+  const password = process.env.GMAIL_APP_PASSWORD;
+  if (email && password) {
+    transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: email,
+        pass: password,
+      },
+    });
+  }
+  return transporter;
+}
+
+const FROM_EMAIL = process.env.GMAIL_EMAIL || "noreply@schoolsaas.app";
 
 export async function sendEmail(to: string, subject: string, html: string): Promise<{ ok: boolean; error?: string }> {
-  if (!resend) {
-    console.log(`[EMAIL] (no API key — logging only) To: ${to} | Subject: ${subject}`);
+  const transport = getTransporter();
+  
+  if (!transport) {
+    console.log(`[EMAIL] (no Gmail credentials — logging only) To: ${to} | Subject: ${subject}`);
     console.log(`[EMAIL] Body preview: ${html.substring(0, 100)}...`);
-    return { ok: true }; // Don't fail the flow, just log
+    return { ok: true };
   }
 
   try {
-    const { data, error } = await resend.emails.send({
-      from: FROM_EMAIL,
+    const info = await transport.sendMail({
+      from: `SchoolSaaS <${FROM_EMAIL}>`,
       to,
       subject,
       html,
     });
 
-    if (error) {
-      console.error('[EMAIL] Error:', error);
-      return { ok: false, error: error.message };
-    }
-
-    console.log(`[EMAIL] Sent to ${to} | ID: ${data?.id}`);
+    console.log(`[EMAIL] Sent to ${to} | Message ID: ${info.messageId}`);
     return { ok: true };
-  } catch (err) {
-    console.error('[EMAIL] Exception:', err);
-    return { ok: false, error: 'Failed to send email' };
+  } catch (err: any) {
+    console.error("[EMAIL] Error:", err.message);
+    return { ok: false, error: err.message };
   }
 }
 

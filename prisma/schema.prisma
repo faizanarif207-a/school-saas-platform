@@ -95,19 +95,20 @@ model AuditLog {
 // ============================================
 
 model User {
-  id            String   @id @default(cuid())
-  email         String   @unique
-  name          String?
-  passwordHash  String
-  role          String   @default("SUPER_ADMIN") // SUPER_ADMIN, SCHOOL_ADMIN, TEACHER, PARENT, STUDENT
-  subRole       String?  // OWNER, PRINCIPAL, ACCOUNTANT, ADMISSION (only for SCHOOL_ADMIN)
-  schoolId      String?
-  school        School?  @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-  branchId      String?
-  isActive      Boolean  @default(true)
-  lastLoginAt  DateTime?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id              String   @id @default(cuid())
+  email           String   @unique
+  name            String?
+  passwordHash    String   @default("pending_approval")
+  role            String   @default("SUPER_ADMIN")
+  subRole         String?
+  schoolId        String?
+  school          School?  @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+  branchId        String?
+  isActive        Boolean  @default(true)
+  approvalStatus  String   @default("approved") // approved, pending_approval, rejected
+  lastLoginAt     DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   auditLogs      AuditLog[]
   notices        Notice[]

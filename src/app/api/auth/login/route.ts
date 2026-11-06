@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Check if school is suspended (for school-level users)
+    // Check if school is suspended
     if (user.schoolId && user.role !== "SUPER_ADMIN") {
       const school = await db.school.findUnique({
         where: { id: user.schoolId },
@@ -38,6 +38,21 @@ export async function POST(req: NextRequest) {
           { status: 403 }
         );
       }
+    }
+
+    // Check if user is pending approval
+    const dbUser = await db.user.findUnique({ where: { id: user.id } });
+    if (dbUser?.approvalStatus === "pending_approval") {
+      return NextResponse.json(
+        { error: "Your account is pending approval from the school administration. Please wait for approval." },
+        { status: 403 }
+      );
+    }
+    if (dbUser?.approvalStatus === "rejected") {
+      return NextResponse.json(
+        { error: "Your account request has been rejected. Please contact the school administration." },
+        { status: 403 }
+      );
     }
 
     await setSessionCookie(user);

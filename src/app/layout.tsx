@@ -32,6 +32,7 @@ export const metadata: Metadata = {
   icons: {
     icon: "/favicon.svg",
   },
+  manifest: "/manifest.json",
   openGraph: {
     title: "School SaaS — Emerson Technology",
     description:

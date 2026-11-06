@@ -21,6 +21,8 @@ import {
   User,
 } from "lucide-react";
 
+import { NotificationBell } from "@/components/notification-bell";
+
 const navSections = [
   {
     label: "School",
@@ -113,8 +115,11 @@ export function SchoolAdminSidebar({ schoolName }: { schoolName: string }) {
 
       <div className="border-t border-sidebar-border p-3 space-y-2">
         <div className="flex items-center justify-between px-2">
-          <span className="text-[10px] text-muted-foreground">Theme</span>
-          <ThemeToggle />
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] text-muted-foreground">Theme</span>
+            <ThemeToggle />
+          </div>
+          <NotificationBell role="SCHOOL_ADMIN" />
         </div>
         <Button
           variant="ghost"

@@ -15,6 +15,7 @@ import {
   LogOut,
   CalendarClock,
 } from "lucide-react";
+import { NotificationBell } from "@/components/notification-bell";
 
 const navSections = [
   {
@@ -103,8 +104,11 @@ export function ParentSidebar({ parentName }: { parentName: string }) {
 
       <div className="border-t border-sidebar-border p-3 space-y-2">
         <div className="flex items-center justify-between px-2">
-          <span className="text-[10px] text-muted-foreground">Theme</span>
-          <ThemeToggle />
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] text-muted-foreground">Theme</span>
+            <ThemeToggle />
+          </div>
+          <NotificationBell role="PARENT" />
         </div>
         <Button
           variant="ghost"

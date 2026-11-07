@@ -1,6 +1,8 @@
 // src/app/api/school/cron/escalate-defaulters/route.ts
-// This endpoint simulates a daily cron job that enforces defaulters policy
-// In production: use Vercel Cron Jobs (vercel.json) to call this daily
+// Daily cron job that enforces defaulters policy.
+// Vercel Cron calls this endpoint daily (configured in vercel.json).
+// Authentication: Vercel sends `Authorization: Bearer <CRON_SECRET>` automatically
+// when CRON_SECRET env var is set. We also accept ?secret= for manual triggers.
 
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
@@ -8,12 +10,20 @@ import { db } from "@/lib/db";
 export const dynamic = "force-dynamic";
 
 export async function GET(req: Request) {
-  // Verify this is called with a secret key (or via Vercel Cron)
+  // Verify this is called with a secret key (via Vercel Cron Authorization header or query string)
+  const authHeader = req.headers.get("authorization") || "";
+  const bearerToken = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
   const url = new URL(req.url);
-  const secret = url.searchParams.get("secret");
-  if (secret !== process.env.CRON_SECRET && process.env.CRON_SECRET) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const querySecret = url.searchParams.get("secret");
+
+  const expectedSecret = process.env.CRON_SECRET;
+  if (expectedSecret) {
+    // If CRON_SECRET is configured, request MUST match it (via either method)
+    if (bearerToken !== expectedSecret && querySecret !== expectedSecret) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
   }
+  // If no CRON_SECRET configured, allow (dev/local mode)
 
   const results = {
     remindersSent: 0,

@@ -30,6 +30,7 @@ type Branch = { id: string; name: string };
 
 const subRoleLabels: Record<string, string> = {
   OWNER: "Owner", PRINCIPAL: "Principal", ACCOUNTANT: "Accountant", ADMISSION: "Admission Officer", TEACHER: "Teacher",
+  PARENT: "Parent", STUDENT: "Student",
 };
 const subRoleColors: Record<string, string> = {
   OWNER: "bg-primary/10 text-primary border-primary/20",
@@ -37,6 +38,8 @@ const subRoleColors: Record<string, string> = {
   ACCOUNTANT: "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/40 dark:text-amber-400",
   ADMISSION: "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/40 dark:text-blue-400",
   TEACHER: "bg-cyan-50 text-cyan-700 border-cyan-200 dark:bg-cyan-950/40 dark:text-cyan-400",
+  PARENT: "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-400",
+  STUDENT: "bg-rose-50 text-rose-700 border-rose-200 dark:bg-rose-950/40 dark:text-rose-400",
 };
 
 export default function StaffPage() {
@@ -125,8 +128,8 @@ export default function StaffPage() {
     <div className="p-6 lg:p-8 space-y-6">
       <Toaster richColors position="top-right" />
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Staff Management</h1>
-        <p className="text-sm text-muted-foreground mt-1">Invite staff, approve requests, and manage access.</p>
+        <h1 className="text-2xl font-bold tracking-tight">Staff & Access Requests</h1>
+        <p className="text-sm text-muted-foreground mt-1">Invite staff, approve access requests from teachers, parents and students, and manage accounts.</p>
       </div>
 
       {/* Pending Approvals Banner */}
@@ -135,7 +138,7 @@ export default function StaffPage() {
           <CardContent className="pt-4 flex items-center gap-3">
             <Clock className="h-5 w-5 text-amber-600" />
             <div className="font-semibold text-sm text-amber-800 dark:text-amber-400">
-              {pendingStaff.length} staff member(s) awaiting your approval
+              {pendingStaff.length} access request(s) awaiting your approval
             </div>
           </CardContent>
         </Card>

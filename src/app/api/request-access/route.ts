@@ -8,14 +8,24 @@ export const dynamic = "force-dynamic";
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { name, email, role, schoolCode } = body;
+    const { name, email, role, schoolCode, admissionId } = body;
 
     if (!name?.trim() || !email?.trim() || !role || !schoolCode?.trim()) {
       return NextResponse.json({ error: "All fields are required" }, { status: 400 });
     }
 
+    // Validate role
+    const validRoles = ["TEACHER", "PARENT", "STUDENT"];
+    if (!validRoles.includes(role)) {
+      return NextResponse.json({ error: "Invalid role" }, { status: 400 });
+    }
+
+    // Students MUST provide admissionId
+    if (role === "STUDENT" && !admissionId?.trim()) {
+      return NextResponse.json({ error: "Admission ID is required for student access requests" }, { status: 400 });
+    }
+
     // Find school by schoolCode (or by name match as fallback)
-    // schoolCode could be the school ID, school name, or a custom code
     const school = await db.school.findFirst({
       where: {
         OR: [
@@ -33,6 +43,26 @@ export async function POST(req: Request) {
         { error: "Invalid school access code. Please contact your school administration." },
         { status: 400 }
       );
+    }
+
+    // For Student role — verify the admissionId exists in this school
+    let linkedStudent: { id: string; name: string } | null = null;
+    if (role === "STUDENT") {
+      const student = await db.student.findFirst({
+        where: {
+          schoolId: school.id,
+          admissionId: admissionId.trim().toUpperCase(),
+          status: "active",
+        },
+        select: { id: true, name: true },
+      });
+      if (!student) {
+        return NextResponse.json(
+          { error: "No active student found with this Admission ID at this school. Please check and try again." },
+          { status: 400 }
+        );
+      }
+      linkedStudent = student;
     }
 
     // Check if user already exists
@@ -57,7 +87,7 @@ export async function POST(req: Request) {
     }
 
     // Determine role + subRole
-    const finalRole = role === "PARENT" ? "PARENT" : "TEACHER";
+    const finalRole = role;
 
     // Create user with pending_approval — NO password
     const newUser = await db.user.create({
@@ -73,6 +103,7 @@ export async function POST(req: Request) {
     });
 
     // Send confirmation email to requester
+    const roleLabel = finalRole.charAt(0) + finalRole.slice(1).toLowerCase();
     const emailHtml = `
     <div style="font-family:Inter,sans-serif;max-width:600px;margin:0 auto;padding:20px;">
       <div style="display:flex;flex-direction:column;gap:4px;margin-bottom:20px;">
@@ -82,7 +113,13 @@ export async function POST(req: Request) {
       </div>
       <h1 style="color:#1C232D;">Access Request Received</h1>
       <p style="color:#5B6672;font-size:15px;line-height:1.6;">Hello ${name.trim()},</p>
-      <p style="color:#5B6672;font-size:15px;line-height:1.6;">Your request to join <strong>${school.name}</strong> as <strong>${finalRole}</strong> has been submitted successfully.</p>
+      <p style="color:#5B6672;font-size:15px;line-height:1.6;">Your request to join <strong>${school.name}</strong> as <strong>${roleLabel}</strong> has been submitted successfully.</p>
+      ${role === "STUDENT" ? `
+      <div style="background:#E7F5EC;border:1px solid #0E9E56;border-radius:10px;padding:20px;margin:20px 0;">
+        <p style="margin:0;color:#0E5C2C;font-size:14px;font-weight:600;">✓ Student Record Verified</p>
+        <p style="margin:8px 0 0;color:#0E5C2C;font-size:13px;">Your Admission ID <strong>${admissionId.trim().toUpperCase()}</strong> matches a student record at this school.</p>
+      </div>
+      ` : ""}
       <div style="background:#FEF4DD;border:1px solid #F5A800;border-radius:10px;padding:20px;margin:20px 0;">
         <p style="margin:0;color:#7A5200;font-size:14px;font-weight:600;">⏳ Pending Approval</p>
         <p style="margin:8px 0 0;color:#7A5200;font-size:13px;">The school administration will review your request. Once approved, you will receive a second email containing your login credentials and temporary password.</p>
@@ -119,13 +156,14 @@ export async function POST(req: Request) {
           <p style="margin:0 0 8px;color:#5B6672;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;">Request Details</p>
           <p style="margin:0 0 4px;font-size:14px;"><strong>Name:</strong> ${name.trim()}</p>
           <p style="margin:0 0 4px;font-size:14px;"><strong>Email:</strong> ${email.toLowerCase().trim()}</p>
-          <p style="margin:0 0 4px;font-size:14px;"><strong>Role:</strong> ${finalRole}</p>
+          <p style="margin:0 0 4px;font-size:14px;"><strong>Role:</strong> ${roleLabel}</p>
+          ${role === "STUDENT" && linkedStudent ? `<p style="margin:0 0 4px;font-size:14px;"><strong>Admission ID:</strong> ${admissionId.trim().toUpperCase()}</p><p style="margin:0 0 4px;font-size:14px;"><strong>Linked Student:</strong> ${linkedStudent.name}</p>` : ""}
         </div>
         <p style="color:#5B6672;font-size:15px;line-height:1.6;">Please login to your dashboard to review and approve this request.</p>
         <p style="color:#94A3B8;font-size:12px;margin-top:30px;padding-top:15px;border-top:1px solid #E6E8E4;">This email was sent by SchoolSaaS — Emerson Technology</p>
       </div>`;
 
-      await sendEmail(admin.email, `New Access Request — ${name.trim()} (${finalRole})`, adminEmailHtml);
+      await sendEmail(admin.email, `New Access Request — ${name.trim()} (${roleLabel})`, adminEmailHtml);
     }
 
     // Audit log
@@ -135,7 +173,13 @@ export async function POST(req: Request) {
         action: "access_request.submit",
         entity: "user",
         entityId: newUser.id,
-        metadata: JSON.stringify({ name, email, role: finalRole }),
+        metadata: JSON.stringify({
+          name,
+          email,
+          role: finalRole,
+          admissionId: role === "STUDENT" ? admissionId : undefined,
+          studentId: linkedStudent?.id,
+        }),
       },
     });
 

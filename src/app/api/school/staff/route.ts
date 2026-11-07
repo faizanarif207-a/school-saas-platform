@@ -7,18 +7,36 @@ import { randomBytes } from "crypto";
 
 export const dynamic = "force-dynamic";
 
-// GET — list staff
-export async function GET() {
+// GET — list staff (and pending access requests from /request-access)
+export async function GET(req: Request) {
   const user = await getSession();
   if (!user || user.role !== "SCHOOL_ADMIN" || !user.schoolId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
+
+  // Parse query string for status filter (optional)
+  const url = new URL(req.url);
+  const filter = url.searchParams.get("filter"); // "all" | "pending" | "approved" | "staff"
+
+  const where: { schoolId: string; role?: any; subRole?: any; approvalStatus?: any } = {
+    schoolId: user.schoolId,
+  };
+
+  if (filter === "pending") {
+    where.approvalStatus = "pending_approval";
+    // Include all role types that can self-request: TEACHER, PARENT, STUDENT + school admin staff
+    where.role = { in: ["SCHOOL_ADMIN", "TEACHER", "PARENT", "STUDENT"] };
+  } else if (filter === "approved") {
+    where.approvalStatus = "approved";
+    where.role = { in: ["SCHOOL_ADMIN", "TEACHER", "PARENT", "STUDENT"] };
+  } else {
+    // default "all" — show all roles except the OWNER themselves + SUPER_ADMIN
+    where.role = { in: ["SCHOOL_ADMIN", "TEACHER", "PARENT", "STUDENT"] };
+    where.subRole = { not: "OWNER" };
+  }
+
   const staff = await db.user.findMany({
-    where: {
-      schoolId: user.schoolId,
-      role: { in: ["SCHOOL_ADMIN", "TEACHER"] },
-      subRole: { not: "OWNER" },
-    },
+    where,
     include: { branch: { select: { name: true } } },
     orderBy: { createdAt: "desc" },
   });

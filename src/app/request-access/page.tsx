@@ -16,7 +16,7 @@ import { Loader2, ArrowLeft, UserPlus, CheckCircle2, ShieldCheck } from "lucide-
 
 export default function RequestAccessPage() {
   const router = useRouter();
-  const [form, setForm] = useState({ name: "", email: "", role: "TEACHER", schoolCode: "" });
+  const [form, setForm] = useState({ name: "", email: "", role: "TEACHER", schoolCode: "", admissionId: "" });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -26,6 +26,10 @@ export default function RequestAccessPage() {
     setError(null);
     if (!form.name.trim() || !form.email.trim() || !form.schoolCode.trim()) {
       setError("All fields are required");
+      return;
+    }
+    if (form.role === "STUDENT" && !form.admissionId.trim()) {
+      setError("Admission ID is required for Student access requests");
       return;
     }
     setLoading(true);
@@ -136,16 +140,39 @@ export default function RequestAccessPage() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="role">Your Role</Label>
-                <Select value={form.role} onValueChange={(v) => setForm({ ...form, role: v })}>
+                <Select value={form.role} onValueChange={(v) => setForm({ ...form, role: v, admissionId: "" })}>
                   <SelectTrigger className="h-11">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="TEACHER">Teacher</SelectItem>
-                    <SelectItem value="PARENT">Parent</SelectItem>
+                    <SelectItem value="TEACHER">👩‍🏫 Teacher</SelectItem>
+                    <SelectItem value="PARENT">👨‍👩‍👧 Parent</SelectItem>
+                    <SelectItem value="STUDENT">🧑‍🎓 Student (Class 6+)</SelectItem>
                   </SelectContent>
                 </Select>
+                {form.role === "STUDENT" && (
+                  <p className="text-xs text-amber-600 dark:text-amber-400 flex items-center gap-1">
+                    <ShieldCheck className="h-3 w-3" />
+                    Student portal access is only for Class 6 and above. Your Admission ID will be verified by the school.
+                  </p>
+                )}
               </div>
+              {form.role === "STUDENT" && (
+                <div className="space-y-2">
+                  <Label htmlFor="admissionId">Your Admission ID</Label>
+                  <Input
+                    id="admissionId"
+                    placeholder="e.g., BEA-LAH-2026-0014"
+                    value={form.admissionId}
+                    onChange={(e) => setForm({ ...form, admissionId: e.target.value })}
+                    required
+                    className="h-11 font-mono"
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    Your Admission ID is printed on your fee slip / school card. It uniquely identifies your student record.
+                  </p>
+                </div>
+              )}
               <div className="space-y-2">
                 <Label htmlFor="schoolCode">School Access Code</Label>
                 <Input
@@ -189,9 +216,9 @@ export default function RequestAccessPage() {
                 How This Works
               </div>
               <ol className="space-y-1 pl-4 list-decimal">
-                <li>Enter your name, email, and school access code</li>
-                <li>School administration receives your request</li>
-                <li>They review and approve (or reject) your request</li>
+                <li>Enter your name, email, role, and school access code</li>
+                <li>{form.role === "STUDENT" ? "Provide your Admission ID for verification" : "School administration receives your request"}</li>
+                <li>They review and verify your details</li>
                 <li>If approved, you receive an email with login credentials</li>
                 <li>Use those credentials to access your portal</li>
               </ol>

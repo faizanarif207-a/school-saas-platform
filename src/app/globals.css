@@ -95,6 +95,30 @@
   --emerson-danger: #DC2626;
   --emerson-purple: #7C3AED;
   --emerson-rose: #E11D48;
+
+  /* ═══ ZOHAIB BUTT DESIGN SYSTEM — Structure (Emerson colors) ═══ */
+  /* Layout/animation/structure inspired by zohaibbutt.com/training,
+     but colors remain Emerson brand (blue/amber/green/ink/cream). */
+  --font-display: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Ubuntu", system-ui, sans-serif;
+
+  /* Color palette — Emerson brand */
+  --zb-bg: #FDFDFB;            /* Emerson warm off-white */
+  --zb-cream: #FEF4DD;          /* Emerson cream (warm yellow tint) */
+  --zb-ink: #1C232D;            /* Emerson ink (dark slate) */
+  --zb-ink-soft: #2A323D;
+  --zb-green: #0064C8;          /* Emerson primary blue (was green in ZB) */
+  --zb-green-dark: #0A56A8;     /* darker blue */
+  --zb-green-bright: #2A7CE8;   /* lighter blue */
+  --zb-mint: #F5A800;           /* Emerson amber accent (was mint in ZB) */
+  --zb-mint-soft: #FFD152;
+  --zb-sage: #FFF8E1;           /* lighter cream tint */
+  --zb-forest-text: #94A3B8;   /* muted blue-grey for text on dark */
+  --zb-text-dark: #1C232D;     /* Emerson ink */
+  --zb-text-muted: #5B6672;    /* Emerson muted */
+  --zb-text-on-dark: #FDFDFB;  /* warm white on dark */
+  --zb-border: #E6E8E4;
+  --zb-border-dark: #2A323D;
 }
 
 .dark {
@@ -147,6 +171,24 @@
   --emerson-danger: #EF4444;
   --emerson-purple: #A78BFA;                 /* lighter purple for dark */
   --emerson-rose: #F472B6;                   /* lighter rose for dark */
+
+  /* Zohaib Butt theme — dark mode uses Emerson ink as background */
+  --zb-bg: #1A1F35;            /* dark navy */
+  --zb-cream: #2A2515;         /* dark cream variant */
+  --zb-ink: #FDFDFB;           /* warm white in dark mode (inverted) */
+  --zb-ink-soft: #E2E8F0;
+  --zb-green: #2A7CE8;          /* brighter blue for dark bg */
+  --zb-green-dark: #0064C8;
+  --zb-green-bright: #4A9CF0;
+  --zb-mint: #F5A800;           /* amber stays same */
+  --zb-mint-soft: #FFD152;
+  --zb-sage: #2A2515;
+  --zb-forest-text: #94A3B8;
+  --zb-text-dark: #FDFDFB;      /* light text on dark */
+  --zb-text-muted: #94A3B8;
+  --zb-text-on-dark: #1A1F35;   /* dark text on light (inverted) */
+  --zb-border: #2A3050;
+  --zb-border-dark: #2A3050;
 }
 
 @layer base {
@@ -183,3 +225,293 @@
 .dark .card-glow:hover {
   box-shadow: 0 0 30px -5px rgba(0, 100, 200, 0.25);
 }
+
+/* ════════════════════════════════════════════════════════════
+   ZOHAIB BUTT DESIGN SYSTEM — utility classes & keyframes
+   ════════════════════════════════════════════════════════════ */
+
+/* Editorial heading style */
+.zb-headline {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+  color: var(--zb-text-dark);
+}
+.dark .zb-headline {
+  color: var(--zb-text-on-dark);
+}
+
+.zb-headline-on-dark {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+  color: var(--zb-text-on-dark);
+}
+
+/* Eyebrow label */
+.zb-eyebrow {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--zb-green);
+}
+
+/* Numbered section marker (01, 02, 03) */
+.zb-section-number {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: var(--zb-green);
+}
+
+/* Body copy */
+.zb-body {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--zb-text-muted);
+}
+.zb-body-on-dark {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--zb-forest-text);
+}
+
+/* Section color utilities */
+.zb-section-cream {
+  background-color: var(--zb-cream);
+  color: var(--zb-text-dark);
+}
+.zb-section-ink {
+  background-color: var(--zb-ink);
+  color: var(--zb-text-on-dark);
+}
+.zb-section-bg {
+  background-color: var(--zb-bg);
+  color: var(--zb-text-dark);
+}
+
+/* Green accent button */
+.zb-btn-green {
+  background-color: var(--zb-green);
+  color: #FFFFFF;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  padding: 14px 28px;
+  border-radius: 9999px;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.zb-btn-green:hover {
+  background-color: var(--zb-green-bright);
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px -8px rgba(0, 100, 200, 0.45);
+}
+
+/* Outline button */
+.zb-btn-outline {
+  background: transparent;
+  color: var(--zb-text-dark);
+  border: 1px solid var(--zb-border);
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 14px;
+  padding: 13px 26px;
+  border-radius: 9999px;
+  transition: all 0.3s ease;
+}
+.zb-btn-outline:hover {
+  border-color: var(--zb-green);
+  color: var(--zb-green);
+}
+.zb-btn-outline-on-dark {
+  background: transparent;
+  color: var(--zb-text-on-dark);
+  border: 1px solid rgba(232, 248, 238, 0.3);
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 14px;
+  padding: 13px 26px;
+  border-radius: 9999px;
+  transition: all 0.3s ease;
+}
+.zb-btn-outline-on-dark:hover {
+  border-color: var(--zb-mint);
+  color: var(--zb-mint);
+}
+
+/* ─── Animations ─── */
+
+/* Hero scroll-reveal */
+@keyframes zb-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes zb-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes zb-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes zb-blob {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%      { transform: translate(30px, -30px) scale(1.05); }
+  66%      { transform: translate(-20px, 20px) scale(0.95); }
+}
+@keyframes zb-marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@keyframes zb-ping-slow {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+@keyframes zb-text-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Apply via class */
+.zb-anim-fade-up {
+  animation: zb-fade-up 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.zb-anim-fade-in {
+  animation: zb-fade-in 0.7s ease-out both;
+}
+.zb-anim-blob {
+  animation: zb-blob 18s ease-in-out infinite;
+}
+.zb-marquee {
+  animation: zb-marquee 30s linear infinite;
+}
+.zb-ping-slow {
+  animation: zb-ping-slow 2.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* Gradient text */
+.zb-gradient-text {
+  background: linear-gradient(135deg, var(--zb-green) 0%, var(--zb-mint) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Shimmering text effect */
+.zb-text-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--zb-text-dark) 0%,
+    var(--zb-green) 25%,
+    var(--zb-text-dark) 50%,
+    var(--zb-green) 75%,
+    var(--zb-text-dark) 100%
+  );
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: zb-text-shimmer 6s linear infinite;
+}
+
+/* 3D tilt card */
+.zb-tilt-card {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* Role card on dark band — hover effect via pure CSS (no JS handlers) */
+.zb-role-card {
+  background: rgba(253, 253, 251, 0.04);
+  border: 1px solid rgba(253, 253, 251, 0.08);
+  border-radius: 16px;
+  padding: 28px;
+  height: 100%;
+  transition: all 0.3s ease;
+}
+.zb-role-card:hover {
+  border-color: var(--zb-green);
+  background: rgba(253, 253, 251, 0.06);
+  transform: translateY(-2px);
+}
+
+/* Sticky reveal wrapper */
+.zb-reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+.zb-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Scroll cue (down arrow) */
+.zb-scroll-cue {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--zb-text-muted);
+}
+.zb-scroll-cue-arrow {
+  width: 1px;
+  height: 32px;
+  background: linear-gradient(to bottom, var(--zb-text-muted), transparent);
+  position: relative;
+}
+.zb-scroll-cue-arrow::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: -3px;
+  width: 7px;
+  height: 7px;
+  border-right: 1px solid var(--zb-text-muted);
+  border-bottom: 1px solid var(--zb-text-muted);
+  transform: rotate(45deg);
+}
+
+/* Disable animations for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .zb-anim-fade-up,
+  .zb-anim-fade-in,
+  .zb-anim-blob,
+  .zb-marquee,
+  .zb-ping-slow,
+  .zb-text-shimmer {
+    animation: none !important;
+  }
+  .zb-reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+

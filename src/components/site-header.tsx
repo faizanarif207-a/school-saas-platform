@@ -1,11 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { EmersonLogo } from "@/components/emerson-logo";
+import { useState, useEffect } from "react";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { EmersonLogo } from "@/components/emerson-logo";
+import { Menu, X } from "lucide-react";
 
 const navLinks = [
   { name: "Features", href: "/features" },
@@ -16,72 +15,142 @@ const navLinks = [
 
 export function SiteHeader() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md">
+    <header
+      className="sticky top-0 z-50 w-full transition-all duration-500"
+      style={{
+        backgroundColor: scrolled ? "rgba(253, 253, 251, 0.85)" : "transparent",
+        backdropFilter: scrolled ? "blur(20px) saturate(180%)" : "none",
+        borderBottom: scrolled ? "1px solid var(--zb-border)" : "1px solid transparent",
+      }}
+    >
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          <Link href="/" className="flex items-center gap-2">
-            <EmersonLogo size={24} variant="light" />
+        <div className="flex h-20 items-center justify-between">
+          {/* Emerson logo (3 colored bars + wordmark) */}
+          <Link
+            href="/"
+            className="flex items-center group"
+            aria-label="Emerson — SchoolSaaS home"
+          >
+            <EmersonLogo size={22} />
+            <span
+              className="ml-3 pl-3 border-l transition-colors"
+              style={{
+                fontFamily: "var(--font-display)",
+                fontWeight: 700,
+                fontSize: "16px",
+                letterSpacing: "-0.02em",
+                color: "var(--zb-text-muted)",
+                borderColor: "var(--zb-border)",
+              }}
+            >
+              SchoolSaaS
+            </span>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-1">
+          {/* Desktop nav */}
+          <nav
+            className="hidden md:flex items-center gap-8"
+            style={{ fontFamily: "var(--font-body)" }}
+          >
             {navLinks.map((link) => (
               <Link
-                key={link.href}
+                key={link.name}
                 href={link.href}
-                className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-muted/50"
+                className="text-sm font-medium hover:opacity-70 transition-opacity relative group"
+                style={{ color: "var(--zb-text-dark)" }}
               >
                 {link.name}
+                <span
+                  className="absolute -bottom-1 left-0 w-0 h-0.5 transition-all group-hover:w-full"
+                  style={{ background: "var(--zb-green)" }}
+                />
               </Link>
             ))}
           </nav>
 
-          <div className="hidden md:flex items-center gap-2">
-            <ThemeToggle />
-            <Button variant="ghost" asChild size="sm">
-              <Link href="/unified-login">Sign In</Link>
-            </Button>
-            <Button asChild size="sm">
-              <Link href="/pricing">
-                Get Started
-                <ChevronDown className="h-3 w-3 ml-1 -rotate-90" />
-              </Link>
-            </Button>
+          {/* Right side */}
+          <div className="flex items-center gap-3">
+            <Link
+              href="/unified-login"
+              className="hidden md:inline-flex text-sm font-medium hover:opacity-70 transition-opacity"
+              style={{ color: "var(--zb-text-dark)", fontFamily: "var(--font-body)" }}
+            >
+              Sign In
+            </Link>
+            <Link
+              href="/pricing"
+              className="zb-btn-green hidden md:inline-flex"
+            >
+              Get Started
+            </Link>
+            <div className="hidden md:block">
+              <ThemeToggle />
+            </div>
+            <button
+              className="md:hidden p-2"
+              onClick={() => setMobileOpen(!mobileOpen)}
+              aria-label="Toggle menu"
+              style={{ color: "var(--zb-text-dark)" }}
+            >
+              {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
           </div>
-
-          <button
-            className="md:hidden p-2 rounded-lg hover:bg-muted"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Toggle menu"
-          >
-            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
         </div>
+      </div>
 
-        {mobileOpen && (
-          <nav className="md:hidden py-4 border-t border-border space-y-1">
+      {/* Mobile menu */}
+      {mobileOpen && (
+        <div
+          className="md:hidden border-t"
+          style={{
+            background: "var(--zb-bg)",
+            borderColor: "var(--zb-border)",
+            padding: "20px 24px",
+          }}
+        >
+          <nav className="flex flex-col gap-3" style={{ fontFamily: "var(--font-body)" }}>
             {navLinks.map((link) => (
               <Link
-                key={link.href}
+                key={link.name}
                 href={link.href}
-                className="block px-4 py-2.5 text-sm font-medium rounded-lg hover:bg-muted"
                 onClick={() => setMobileOpen(false)}
+                className="text-sm font-medium py-2"
+                style={{ color: "var(--zb-text-dark)" }}
               >
                 {link.name}
               </Link>
             ))}
-            <div className="pt-2 flex gap-2">
-              <Button variant="outline" asChild className="flex-1">
-                <Link href="/login">Sign In</Link>
-              </Button>
-              <Button asChild className="flex-1">
-                <Link href="/pricing">Get Started</Link>
-              </Button>
+            <div className="pt-3 mt-2 border-t flex flex-col gap-2" style={{ borderColor: "var(--zb-border)" }}>
+              <Link
+                href="/unified-login"
+                onClick={() => setMobileOpen(false)}
+                className="text-sm font-medium py-2"
+                style={{ color: "var(--zb-text-dark)" }}
+              >
+                Sign In
+              </Link>
+              <Link
+                href="/pricing"
+                onClick={() => setMobileOpen(false)}
+                className="zb-btn-green text-center"
+              >
+                Get Started
+              </Link>
             </div>
           </nav>
-        )}
-      </div>
+        </div>
+      )}
     </header>
   );
 }
+

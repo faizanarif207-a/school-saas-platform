@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono, Space_Grotesk, Ubuntu } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -13,6 +13,21 @@ const inter = Inter({
 const mono = JetBrains_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
+});
+
+// Zohaib Butt design system fonts
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-display",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
+
+const ubuntu = Ubuntu({
+  variable: "--font-body",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "700"],
   display: "swap",
 });
 
@@ -55,7 +70,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${mono.variable} antialiased bg-background text-foreground`}
+        className={`${inter.variable} ${mono.variable} ${spaceGrotesk.variable} ${ubuntu.variable} antialiased bg-background text-foreground`}
       >
         <ThemeProvider
           attribute="class"

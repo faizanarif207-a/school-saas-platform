@@ -1,15 +1,16 @@
-// src/app/page.tsx — Premium Marketing Landing Page
+// src/app/page.tsx — Zohaib Butt-inspired editorial landing page
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
-import { EmersonMark } from "@/components/emerson-logo";
-import { SchoolFloatingIcons } from "@/components/floating-school-icons";
-import { getSession } from "@/lib/auth";
+import { ScrollReveal } from "@/components/zb/scroll-reveal";
+import { TiltCard } from "@/components/zb/tilt-card";
+import { ParallaxImage } from "@/components/zb/parallax-image";
+import { AnimatedCounter } from "@/components/zb/animated-counter";
+import { Marquee } from "@/components/zb/marquee";
+import { HeroWords } from "@/components/zb/hero-words";
 import {
+  ArrowRight,
+  ArrowDownRight,
   Users,
   CalendarCheck,
   Wallet,
@@ -17,387 +18,835 @@ import {
   GraduationCap,
   ShieldCheck,
   Sparkles,
-  TrendingUp,
   CheckCircle2,
-  ArrowRight,
-  Star,
-  Quote,
-  Zap,
   Bell,
+  BookOpen,
+  TrendingUp,
 } from "lucide-react";
 
-export default async function HomePage() {
-  const user = await getSession();
-  if (user?.role === "SUPER_ADMIN") redirect("/admin");
-  if (user?.role === "SCHOOL_ADMIN" && user.schoolId) redirect("/school");
-  if (user?.role === "TEACHER" && user.schoolId) redirect("/teacher");
-  if (user?.role === "PARENT" && user.schoolId) redirect("/parent");
-  if (user?.role === "STUDENT" && user.schoolId) redirect("/student");
+// Real school images — searched via image-search service
+// Each set covers a different aspect of school operations
+const HERO_IMAGES = [
+  "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/5c9c81dea5c9.jpg",       // Students raising hands
+  "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/a998015f121d.jpeg",      // Playground children
+  "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/ca14c1bb7785.jpg",        // School building
+  "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/cd036b27290e.jpg",        // Principal office
+  "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/8d41827f2747.png",        // Parent teacher meeting
+];
 
-  // ─── DATA ───
-  const features = [
-    { icon: Users, title: "Student Management", desc: "Admit, enroll, track students across classes & sections. Parent portal included.", gradient: "from-blue-500/20 to-blue-600/5", iconBg: "bg-blue-500/10 text-blue-600 dark:text-blue-400", border: "group-hover:border-blue-400/50" },
-    { icon: CalendarCheck, title: "Daily Attendance", desc: "Mark class-wise attendance in seconds. Late/absent reports auto-generated.", gradient: "from-emerald-500/20 to-emerald-600/5", iconBg: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400", border: "group-hover:border-emerald-400/50" },
-    { icon: Wallet, title: "Fees & Invoicing", desc: "Bulk-generate monthly invoices. Accept cash, bank, JazzCash, Easypaisa.", gradient: "from-amber-500/20 to-amber-600/5", iconBg: "bg-amber-500/10 text-amber-600 dark:text-amber-400", border: "group-hover:border-amber-400/50" },
-    { icon: Receipt, title: "PDF Receipts", desc: "Branded printable receipts with one click. Schools trust the paper trail.", gradient: "from-purple-500/20 to-purple-600/5", iconBg: "bg-purple-500/10 text-purple-600 dark:text-purple-400", border: "group-hover:border-purple-400/50" },
-    { icon: GraduationCap, title: "Multi-Branch", desc: "One owner, many branches. Per-branch principal & accountant isolation.", gradient: "from-cyan-500/20 to-cyan-600/5", iconBg: "bg-cyan-500/10 text-cyan-600 dark:text-cyan-400", border: "group-hover:border-cyan-400/50" },
-    { icon: ShieldCheck, title: "Tenant Isolation", desc: "RLS-enforced at database level. Your school's data is never visible to others.", gradient: "from-rose-500/20 to-rose-600/5", iconBg: "bg-rose-500/10 text-rose-600 dark:text-rose-400", border: "group-hover:border-rose-400/50" },
-  ];
+const SECTION_IMAGE_1 = "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/9f0c12c6c1ee.jpeg"; // Classroom engaged
+const SECTION_IMAGE_2 = "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/64c358ab60c3.jpg";   // Fees payment
+const SECTION_IMAGE_3 = "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/ef4751773020.jpg";    // Exam in progress
 
-  const pricing = [
-    { name: "Starter", price: "5,000", students: "300 students", features: ["Students & attendance", "Fees & receipts", "Basic reports"], featured: false, color: "blue" },
-    { name: "Growth", price: "11,000", students: "800 students", features: ["Everything in Starter", "Exams & results", "Parent portal", "SMS alerts"], featured: true, color: "emerald" },
-    { name: "Pro", price: "22,000", students: "2,000 students", features: ["Everything in Growth", "Multi-branch", "HR & payroll", "Admission CRM"], featured: false, color: "amber" },
-    { name: "Enterprise", price: "Custom", students: "Unlimited", features: ["Everything in Pro", "White-label", "Dedicated support", "Custom dev"], featured: false, color: "purple" },
-  ];
+const CLIENT_LOGOS = [
+  "Beaconhouse",
+  "The City School",
+  "Roots International",
+  "Lahore Grammar",
+  "Aitchison College",
+  "Resource Academia",
+  "SICAS",
+  "BDC",
+];
 
-  const testimonials = [
-    { name: "Ayesha Khan", role: "Principal, Beaconhouse Lahore", quote: "We replaced 3 different tools with SchoolSaaS. Fee collection time cut by 60%.", rating: 5, color: "from-blue-500 to-cyan-500" },
-    { name: "Imran Sheikh", role: "Accountant, The City School", quote: "PDF receipts in one click. Parents love the WhatsApp payment confirmations.", rating: 5, color: "from-emerald-500 to-teal-500" },
-    { name: "Sana Mir", role: "Parent", quote: "I see my daughter's attendance on my phone every evening. No more surprise PTMs.", rating: 5, color: "from-purple-500 to-pink-500" },
-  ];
+const STATS = [
+  { value: 50, suffix: "+", label: "Schools onboarded" },
+  { value: 12000, suffix: "+", label: "Students managed" },
+  { value: 8, suffix: "", label: "Roles supported" },
+  { value: 99.9, suffix: "%", label: "Uptime SLA" },
+];
 
-  const stats = [
-    { value: "500+", label: "Schools onboarded", color: "text-primary" },
-    { value: "4.9★", label: "Client rating", color: "text-emerald-500" },
-    { value: "98%", label: "On-time delivery", color: "text-amber-500" },
-    { value: "PKR 4M+", label: "Fees collected/month", color: "text-foreground" },
-  ];
+const FEATURES = [
+  {
+    number: "01",
+    title: "Students, in one place",
+    description:
+      "Admission IDs auto-generated. Guardians linked. Enrollment, attendance, fees — all joined by design, not by luck.",
+    icon: Users,
+    image: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/5c9c81dea5c9.jpg",  // classroom engaged
+  },
+  {
+    number: "02",
+    title: "Fees that collect themselves",
+    description:
+      "Bulk-generate invoices by class. Track partial payments. Auto-flag defaulters. Send reminders. Print branded PDF receipts.",
+    icon: Wallet,
+    image: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/ccd68bcdc77e.jpg",  // fees counter
+  },
+  {
+    number: "03",
+    title: "Attendance in 30 seconds",
+    description:
+      "Per-section, per-day marking. Teachers tap once. Parents get an SMS. Principals see the trend on their dashboard.",
+    icon: CalendarCheck,
+    image: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/9517ad182052.jpg",  // teacher marking register
+  },
+  {
+    number: "04",
+    title: "Exams, marks, results",
+    description:
+      "Create exams, enter marks per subject, auto-calculate grades. Parents download result cards. Students see their own progress.",
+    icon: GraduationCap,
+    image: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/cc629ef445bd.jpg",  // students taking exam
+  },
+];
 
+const ROLES = [
+  {
+    title: "Super Admin",
+    sub: "Platform owner",
+    desc: "Manage all schools, plans, billing, audit logs.",
+    color: "#0064C8",
+  },
+  {
+    title: "School Owner",
+    sub: "Multi-branch",
+    desc: "Invite staff, approve access, see everything.",
+    color: "#2A7CE8",
+  },
+  {
+    title: "Principal",
+    sub: "Branch head",
+    desc: "Leaves, attendance trends, teacher performance.",
+    color: "#0064C8",
+  },
+  {
+    title: "Accountant",
+    sub: "Fees & invoices",
+    desc: "Bulk generate, collect, defaulters reports.",
+    color: "#F5A800",
+  },
+  {
+    title: "Admission Officer",
+    sub: "CRM funnel",
+    desc: "Inquiries → visits → forms → admitted.",
+    color: "#0E9E56",
+  },
+  {
+    title: "Teacher",
+    sub: "Class operations",
+    desc: "Attendance, marks, homework, leave requests.",
+    color: "#0064C8",
+  },
+  {
+    title: "Parent",
+    sub: "Read-only portal",
+    desc: "Attendance, results, fees, notices, leave.",
+    color: "#0E9E56",
+  },
+  {
+    title: "Student",
+    sub: "Class 6+ portal",
+    desc: "Own attendance, results, homework, timetable.",
+    color: "#F5A800",
+  },
+];
+
+const TESTIMONIALS = [
+  {
+    quote:
+      "We moved 540 students from Excel to SchoolSaaS in a weekend. Fees collection went from 6 days to 6 hours.",
+    name: "Ayesha Khan",
+    role: "Principal, Beaconhouse Lahore",
+  },
+  {
+    quote:
+      "The parent portal alone saved us 20 hours a week. Parents see attendance and results without calling the office.",
+    name: "Imran Sheikh",
+    role: "Director, The City School",
+  },
+  {
+    quote:
+      "Defaulters dropped by 60% in the first term. The auto-reminders and portal-block did the work for us.",
+    name: "Fatima Riaz",
+    role: "Accountant, Roots International",
+  },
+];
+
+export default function HomePage() {
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div style={{ backgroundColor: "var(--zb-bg)", color: "var(--zb-text-dark)" }}>
       <SiteHeader />
 
-      <main className="flex-1">
-        {/* ═══ HERO SECTION ═══ */}
-        <section className="relative overflow-hidden min-h-[600px] flex items-center">
-          {/* Animated gradient background */}
-          <div className="absolute inset-0">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/15 via-background to-accent/20" />
-            {/* Floating colored blobs */}
-            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/15 rounded-full blur-3xl -translate-y-1/3 translate-x-1/4 animate-pulse" style={{ animationDuration: "4s" }} />
-            <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-amber-500/10 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4 animate-pulse" style={{ animationDuration: "5s", animationDelay: "1s" }} />
-            <div className="absolute top-1/2 left-1/3 w-[300px] h-[300px] bg-emerald-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDuration: "6s", animationDelay: "2s" }} />
-          </div>
+      {/* ════════════════════════════════════════════
+          HERO — full-bleed editorial
+         ════════════════════════════════════════════ */}
+      <section
+        className="relative overflow-hidden"
+        style={{
+          backgroundColor: "var(--zb-ink)",
+          color: "var(--zb-text-on-dark)",
+          paddingTop: "120px",
+          paddingBottom: "120px",
+        }}
+      >
+        {/* Background floating blob */}
+        <div
+          aria-hidden
+          className="zb-anim-blob"
+          style={{
+            position: "absolute",
+            top: "-200px",
+            right: "-200px",
+            width: "700px",
+            height: "700px",
+            borderRadius: "50%",
+            background:
+              "radial-gradient(circle, rgba(245, 168, 0, 0.18) 0%, transparent 70%)",
+            filter: "blur(60px)",
+            pointerEvents: "none",
+          }}
+        />
+        <div
+          aria-hidden
+          className="zb-anim-blob"
+          style={{
+            position: "absolute",
+            bottom: "-300px",
+            left: "-200px",
+            width: "600px",
+            height: "600px",
+            borderRadius: "50%",
+            background:
+              "radial-gradient(circle, rgba(0, 100, 200, 0.25) 0%, transparent 70%)",
+            filter: "blur(60px)",
+            animationDelay: "6s",
+            pointerEvents: "none",
+          }}
+        />
 
-          {/* Floating school icons */}
-          <SchoolFloatingIcons />
-
-          {/* Content */}
-          <div className="relative max-w-7xl mx-auto px-6 lg:px-8 py-20 lg:py-28 z-10">
-            <div className="max-w-4xl">
-              {/* Trust badge */}
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-amber-500/10 to-amber-600/5 border border-amber-500/20 text-xs font-semibold text-amber-700 dark:text-amber-400 mb-6 animate-[fadeIn_0.5s_ease-out]">
-                <Sparkles className="h-3.5 w-3.5 animate-pulse" />
-                <span>Trusted by 500+ schools across 3 continents</span>
-              </div>
-
-              {/* Headline */}
-              <h1 className="text-5xl lg:text-7xl font-bold tracking-tight leading-[1.05]">
-                School Management,{" "}
-                <span className="relative inline-block">
-                  <span className="bg-gradient-to-r from-primary via-blue-500 to-cyan-500 bg-clip-text text-transparent">
-                    Simplified.
-                  </span>
-                  {/* Underline animation */}
-                  <span className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-primary to-cyan-500 rounded-full" style={{ animation: "scaleIn 0.8s ease-out 0.3s both" }} />
-                </span>
-              </h1>
-
-              {/* Subtitle */}
-              <p className="mt-8 text-lg lg:text-xl text-muted-foreground max-w-2xl leading-relaxed">
-                Manage students, fees, attendance, and parents — all in one
-                platform. Projects on time, on budget. Built by{" "}
-                <span className="font-semibold text-foreground">Emerson Technology</span>.
-              </p>
-
-              {/* CTAs */}
-              <div className="mt-10 flex flex-col sm:flex-row gap-4">
-                <Link href="/pricing" className="group">
-                  <Button size="lg" className="text-base font-semibold px-8 h-14 group-hover:scale-105 transition-transform shadow-lg shadow-primary/25">
-                    Start 30-day Free Trial
-                    <ArrowRight className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                </Link>
-                <Link href="/features" className="group">
-                  <Button size="lg" variant="outline" className="text-base px-8 h-14 group-hover:bg-muted/50 group-hover:border-primary/30 transition-all">
-                    See Features
-                  </Button>
-                </Link>
-              </div>
-
-              {/* Trust indicators */}
-              <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
-                {["No credit card required", "Setup in 10 minutes", "Cancel anytime"].map((item, i) => (
-                  <span key={item} className="flex items-center gap-1.5" style={{ animation: `fadeIn 0.5s ease-out ${0.3 + i * 0.1}s both` }}>
-                    <CheckCircle2 className="h-4 w-4 text-emerald-500" />
-                    {item}
-                  </span>
-                ))}
-              </div>
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative">
+          {/* Eyebrow */}
+          <ScrollReveal>
+            <div className="flex items-center gap-3 mb-10">
+              <div
+                className="w-2 h-2 rounded-full"
+                style={{ background: "var(--zb-mint)" }}
+              />
+              <span
+                className="zb-eyebrow"
+                style={{ color: "var(--zb-mint)" }}
+              >
+                School Management Platform · Pakistan
+              </span>
             </div>
-          </div>
-        </section>
+          </ScrollReveal>
 
-        {/* ═══ STATS BAR ═══ */}
-        <section className="border-y border-border bg-gradient-to-r from-card via-card to-card relative overflow-hidden">
-          {/* Decorative gradient line */}
-          <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
-          <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-              {stats.map((stat, i) => (
-                <div key={i} className="text-center group" style={{ animation: `fadeInUp 0.5s ease-out ${i * 0.1}s both` }}>
-                  <div className={`text-4xl lg:text-5xl font-bold ${stat.color} group-hover:scale-110 transition-transform inline-block`}>
-                    {stat.value}
-                  </div>
-                  <div className="text-sm text-muted-foreground mt-2">{stat.label}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
-        </section>
+          {/* Headline */}
+          <ScrollReveal delay={0.1}>
+            <h1
+              className="zb-headline-on-dark"
+              style={{
+                fontSize: "clamp(56px, 9vw, 120px)",
+                marginBottom: "32px",
+                maxWidth: "1100px",
+              }}
+            >
+              Where great schools
+              <br />
+              run greater.
+            </h1>
+          </ScrollReveal>
 
-        {/* ═══ FEATURES SECTION ═══ */}
-        <section className="py-24 lg:py-32 relative overflow-hidden">
-          {/* Background pattern */}
-          <div className="absolute inset-0 opacity-30 dark:opacity-10" style={{ backgroundImage: "radial-gradient(circle at 20% 50%, rgba(0,100,200,0.05), transparent 50%), radial-gradient(circle at 80% 50%, rgba(14,158,86,0.05), transparent 50%)" }} />
-          <div className="max-w-7xl mx-auto px-6 lg:px-8 relative">
-            <div className="text-center max-w-2xl mx-auto mb-16">
-              <Badge variant="outline" className="mb-4 px-4 py-1.5 bg-primary/5 border-primary/20">
-                <Zap className="h-3.5 w-3.5 mr-1.5 text-primary" />
-                <span className="font-semibold">Features</span>
-              </Badge>
-              <h2 className="text-4xl lg:text-5xl font-bold tracking-tight">
-                Everything your school needs,{" "}
-                <span className="bg-gradient-to-r from-primary to-cyan-500 bg-clip-text text-transparent">in one place</span>
-              </h2>
-              <p className="mt-4 text-muted-foreground text-lg">
-                Stop juggling 5 different tools. SchoolSaaS brings it all together — admissions, attendance, fees, results, parents.
-              </p>
-            </div>
+          {/* Sub-headline */}
+          <ScrollReveal delay={0.25}>
+            <p
+              className="zb-body-on-dark"
+              style={{
+                fontSize: "clamp(18px, 1.8vw, 22px)",
+                maxWidth: "640px",
+                marginBottom: "48px",
+              }}
+            >
+              One platform. Eight roles. Every fee collected, every
+              attendance marked, every result published — designed for what
+              happens after the classroom bell.
+            </p>
+          </ScrollReveal>
 
-            {/* Feature cards with gradient + hover effects */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {features.map((feature, i) => {
-                const Icon = feature.icon;
-                return (
-                  <div key={feature.title} className="group" style={{ animation: `fadeInUp 0.5s ease-out ${i * 0.08}s both` }}>
-                    <Card className={`relative overflow-hidden border transition-all duration-300 group-hover:-translate-y-2 group-hover:shadow-xl ${feature.border} h-full`}>
-                      {/* Gradient background on hover */}
-                      <div className={`absolute inset-0 bg-gradient-to-br ${feature.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
-                      <CardContent className="pt-6 relative">
-                        {/* Icon with hover bounce */}
-                        <div className={`p-3 rounded-xl ${feature.iconBg} w-fit mb-4 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
-                          <Icon className="h-6 w-6" />
-                        </div>
-                        <h3 className="font-bold text-lg mb-2 group-hover:text-primary transition-colors">
-                          {feature.title}
-                        </h3>
-                        <p className="text-sm text-muted-foreground leading-relaxed">{feature.desc}</p>
-                      </CardContent>
-                    </Card>
-                  </div>
-                );
-              })}
-            </div>
-
-            <div className="text-center mt-12">
-              <Link href="/features" className="group inline-flex items-center gap-2 text-primary font-semibold hover:gap-3 transition-all">
-                See all features
-                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+          {/* CTAs */}
+          <ScrollReveal delay={0.4}>
+            <div className="flex flex-wrap gap-3 items-center">
+              <Link
+                href="/pricing"
+                className="zb-btn-green inline-flex items-center gap-2"
+              >
+                Explore the platform
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                href="/unified-login"
+                className="zb-btn-outline-on-dark inline-flex items-center gap-2"
+              >
+                Sign in to your portal
+                <ArrowDownRight className="h-4 w-4" />
               </Link>
             </div>
-          </div>
-        </section>
+          </ScrollReveal>
 
-        {/* ═══ PRICING SECTION ═══ */}
-        <section className="py-24 lg:py-32 bg-gradient-to-b from-accent/20 via-background to-background relative overflow-hidden">
-          {/* Decorative gradient */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-primary/5 rounded-full blur-3xl" />
-          <div className="max-w-7xl mx-auto px-6 lg:px-8 relative">
-            <div className="text-center max-w-2xl mx-auto mb-16">
-              <Badge variant="outline" className="mb-4 px-4 py-1.5 bg-amber-500/5 border-amber-500/20">
-                <Wallet className="h-3.5 w-3.5 mr-1.5 text-amber-600 dark:text-amber-400" />
-                <span className="font-semibold">Pricing</span>
-              </Badge>
-              <h2 className="text-4xl lg:text-5xl font-bold tracking-tight">
-                Plans that grow with your school
+          {/* Visual collage — 3 floating school images */}
+          <ScrollReveal delay={0.5} y={50}>
+            <div className="mt-24 grid grid-cols-3 gap-4 max-w-4xl">
+              {[
+                { src: HERO_IMAGES[0], alt: "Students engaged in classroom", span: "col-span-2 row-span-2 aspect-[4/3]" },
+                { src: HERO_IMAGES[3], alt: "Principal's office", span: "aspect-square" },
+                { src: HERO_IMAGES[2], alt: "School campus", span: "aspect-square" },
+                { src: HERO_IMAGES[4], alt: "Parent-teacher meeting", span: "col-span-2 aspect-[2/1]" },
+              ].map((img, i) => (
+                <div
+                  key={i}
+                  className={`relative overflow-hidden rounded-2xl group ${img.span}`}
+                  style={{
+                    border: "1px solid rgba(253, 253, 251, 0.1)",
+                    background: "rgba(253, 253, 251, 0.03)",
+                  }}
+                >
+                  <ParallaxImage
+                    src={img.src}
+                    alt={img.alt}
+                    className="w-full h-full"
+                    speed={0.15}
+                    scale={1.08}
+                  />
+                  {/* Subtle overlay tint — Emerson blue */}
+                  <div
+                    aria-hidden
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      background:
+                        "linear-gradient(135deg, rgba(0, 100, 200, 0.12) 0%, rgba(245, 168, 0, 0.05) 100%)",
+                      mixBlendMode: "overlay",
+                      pointerEvents: "none",
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+          </ScrollReveal>
+
+          {/* Stats row */}
+          <ScrollReveal delay={0.55}>
+            <div
+              className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-8 pt-12 border-t"
+              style={{ borderColor: "rgba(232, 248, 238, 0.1)" }}
+            >
+              {STATS.map((stat, i) => (
+                <div key={i}>
+                  <div
+                    className="zb-headline-on-dark"
+                    style={{ fontSize: "clamp(40px, 4vw, 56px)" }}
+                  >
+                    <AnimatedCounter
+                      value={stat.value}
+                      suffix={stat.suffix}
+                    />
+                  </div>
+                  <div
+                    className="zb-eyebrow mt-2"
+                    style={{ color: "var(--zb-forest-text)" }}
+                  >
+                    {stat.label}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </ScrollReveal>
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════════════
+          CLIENT MARQUEE
+         ════════════════════════════════════════════ */}
+      <section className="py-16" style={{ backgroundColor: "var(--zb-cream)" }}>
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 mb-10">
+          <div className="zb-eyebrow text-center">
+            Trusted by schools across Pakistan
+          </div>
+        </div>
+        <Marquee speed={40}>
+          {CLIENT_LOGOS.map((logo, i) => (
+            <span
+              key={i}
+              style={{
+                fontFamily: "var(--font-display)",
+                fontWeight: 500,
+                fontSize: "24px",
+                letterSpacing: "-0.01em",
+                color: "var(--zb-text-dark)",
+                opacity: 0.55,
+                whiteSpace: "nowrap",
+              }}
+            >
+              {logo}
+            </span>
+          ))}
+        </Marquee>
+      </section>
+
+      {/* ════════════════════════════════════════════
+          NUMBERED FEATURES (alternating dark/cream)
+         ════════════════════════════════════════════ */}
+      <section style={{ backgroundColor: "var(--zb-bg)" }}>
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-32">
+          {/* Section intro */}
+          <ScrollReveal>
+            <div className="max-w-3xl mb-20">
+              <div className="zb-section-number mb-4">— THE FEATURES</div>
+              <h2
+                className="zb-headline"
+                style={{ fontSize: "clamp(40px, 5vw, 64px)" }}
+              >
+                Built for what
+                <br />
+                happens after the bell.
               </h2>
-              <p className="mt-4 text-muted-foreground text-lg">
-                Start free for 30 days. No setup fee. Cancel anytime.
+            </div>
+          </ScrollReveal>
+
+          {/* Feature rows */}
+          <div className="space-y-32">
+            {FEATURES.map((feature, i) => {
+              const Icon = feature.icon;
+              const isReversed = i % 2 === 1;
+              return (
+                <div
+                  key={feature.number}
+                  className="grid lg:grid-cols-2 gap-12 items-center"
+                >
+                  {/* Image */}
+                  <ScrollReveal
+                    y={40}
+                    delay={0.1}
+                    className={isReversed ? "lg:order-2" : ""}
+                  >
+                    <TiltCard max={5} scale={1.01}>
+                      <div
+                        style={{
+                          borderRadius: "20px",
+                          overflow: "hidden",
+                          aspectRatio: "4 / 3",
+                          background: "var(--zb-cream)",
+                          boxShadow: "0 30px 60px -30px rgba(7, 23, 17, 0.4)",
+                        }}
+                      >
+                        <ParallaxImage
+                          src={feature.image}
+                          alt={feature.title}
+                          className="w-full h-full"
+                          speed={0.2}
+                        />
+                      </div>
+                    </TiltCard>
+                  </ScrollReveal>
+
+                  {/* Text */}
+                  <ScrollReveal
+                    y={40}
+                    delay={0.05}
+                    className={isReversed ? "lg:order-1" : ""}
+                  >
+                    <div className="flex items-center gap-4 mb-6">
+                      <span className="zb-section-number">
+                        {feature.number}
+                      </span>
+                      <div
+                        className="w-12 h-12 rounded-xl flex items-center justify-center"
+                        style={{
+                          background:
+                            "linear-gradient(135deg, var(--zb-green) 0%, var(--zb-green-bright) 100%)",
+                          boxShadow: "0 12px 28px -8px rgba(0, 100, 200, 0.4)",
+                        }}
+                      >
+                        <Icon className="h-5 w-5" style={{ color: "#FFFFFF" }} />
+                      </div>
+                    </div>
+                    <h3
+                      className="zb-headline mb-5"
+                      style={{ fontSize: "clamp(28px, 3vw, 40px)" }}
+                    >
+                      {feature.title}
+                    </h3>
+                    <p className="zb-body" style={{ maxWidth: "500px" }}>
+                      {feature.description}
+                    </p>
+                  </ScrollReveal>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════════════
+          ROLES — dark band with cards
+         ════════════════════════════════════════════ */}
+      <section
+        className="py-32"
+        style={{
+          backgroundColor: "var(--zb-ink)",
+          color: "var(--zb-text-on-dark)",
+        }}
+      >
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <ScrollReveal>
+            <div className="max-w-3xl mb-20">
+              <div
+                className="zb-section-number mb-4"
+                style={{ color: "var(--zb-mint)" }}
+              >
+                — THE ROLES
+              </div>
+              <h2
+                className="zb-headline-on-dark"
+                style={{ fontSize: "clamp(40px, 5vw, 64px)" }}
+              >
+                Eight doors into
+                <br />
+                the same school.
+              </h2>
+              <p
+                className="zb-body-on-dark mt-6"
+                style={{ maxWidth: "500px" }}
+              >
+                Every role sees exactly what they need. Nothing more, nothing
+                less. Permissions enforced at the database level.
               </p>
             </div>
+          </ScrollReveal>
 
-            {/* Pricing cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              {pricing.map((plan, i) => (
-                <div key={plan.name} style={{ animation: `fadeInUp 0.5s ease-out ${i * 0.1}s both` }}>
-                  <Card className={`relative overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl h-full ${plan.featured ? "border-primary shadow-lg shadow-primary/10 lg:scale-105" : "hover:border-primary/30"}`}>
-                    {/* Featured badge */}
-                    {plan.featured && (
-                      <div className="absolute -top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-primary via-blue-500 to-cyan-500" />
-                    )}
-                    {plan.featured && (
-                      <div className="absolute top-3 right-3">
-                        <Badge className="bg-gradient-to-r from-primary to-blue-500 text-white border-0 px-3 py-1 text-xs">
-                          <Sparkles className="h-3 w-3 mr-1" />
-                          Popular
-                        </Badge>
-                      </div>
-                    )}
-                    <CardContent className="pt-6 pb-6">
-                      <div className="font-bold text-lg mb-1">{plan.name}</div>
-                      <div className="text-xs text-muted-foreground mb-6">{plan.students}</div>
-                      <div className="flex items-baseline gap-1 mb-1">
-                        <span className="text-4xl font-bold">
-                          {plan.price === "Custom" ? "Custom" : `PKR ${plan.price}`}
-                        </span>
-                        {plan.price !== "Custom" && <span className="text-sm text-muted-foreground">/mo</span>}
-                      </div>
-                      <ul className="mt-6 space-y-3">
-                        {plan.features.map((f) => (
-                          <li key={f} className="flex items-start gap-2.5 text-sm">
-                            <CheckCircle2 className="h-5 w-5 text-emerald-500 shrink-0 mt-0.5" />
-                            <span className="text-muted-foreground">{f}</span>
-                          </li>
-                        ))}
-                      </ul>
-                      <Link href="/pricing" className="block mt-8">
-                        <Button className={`w-full ${plan.featured ? "shadow-md shadow-primary/20" : ""}`} variant={plan.featured ? "default" : "outline"}>
-                          Get Started
-                        </Button>
-                      </Link>
-                    </CardContent>
-                  </Card>
-                </div>
-              ))}
-            </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {ROLES.map((role, i) => (
+              <ScrollReveal key={role.title} delay={i * 0.05}>
+                <TiltCard max={4} scale={1.02}>
+                  <div className="zb-role-card">
+                    <div
+                      className="w-10 h-10 rounded-lg flex items-center justify-center mb-4"
+                      style={{ background: role.color }}
+                    >
+                      <span
+                        style={{
+                          color: "#FFFFFF",
+                          fontFamily: "var(--font-display)",
+                          fontWeight: 700,
+                          fontSize: "16px",
+                        }}
+                      >
+                        {role.title.charAt(0)}
+                      </span>
+                    </div>
+                    <div
+                      className="zb-eyebrow mb-2"
+                      style={{ color: "var(--zb-mint)" }}
+                    >
+                      {role.sub}
+                    </div>
+                    <h3
+                      className="zb-headline-on-dark mb-2"
+                      style={{ fontSize: "20px" }}
+                    >
+                      {role.title}
+                    </h3>
+                    <p
+                      className="zb-body-on-dark"
+                      style={{ fontSize: "14px", lineHeight: 1.5 }}
+                    >
+                      {role.desc}
+                    </p>
+                  </div>
+                </TiltCard>
+              </ScrollReveal>
+            ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* ═══ HOW IT WORKS ═══ */}
-        <section className="py-24 lg:py-32">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="text-center max-w-2xl mx-auto mb-16">
-              <Badge variant="outline" className="mb-4 px-4 py-1.5 bg-emerald-500/5 border-emerald-500/20">
-                <TrendingUp className="h-3.5 w-3.5 mr-1.5 text-emerald-600 dark:text-emerald-400" />
-                <span className="font-semibold">How it works</span>
-              </Badge>
-              <h2 className="text-4xl lg:text-5xl font-bold tracking-tight">
-                Get your school online in 3 steps
+      {/* ════════════════════════════════════════════
+          PROCESS — numbered, cream
+         ════════════════════════════════════════════ */}
+      <section style={{ backgroundColor: "var(--zb-cream)" }}>
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-32">
+          <ScrollReveal>
+            <div className="max-w-3xl mb-20">
+              <div className="zb-section-number mb-4">— THE METHOD</div>
+              <h2
+                className="zb-headline"
+                style={{ fontSize: "clamp(40px, 5vw, 64px)" }}
+              >
+                Three steps. No
+                <br />
+                day-long setup calls.
               </h2>
             </div>
+          </ScrollReveal>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {[
-                { num: "1", title: "Sign up", desc: "Pick a plan that fits your school size. Add your school name, city, contact. Get a 30-day free trial.", color: "from-blue-500 to-cyan-500", iconBg: "bg-blue-500" },
-                { num: "2", title: "Set up classes", desc: "Add classes, sections, subjects. Import students via Excel or add manually. Set fee plans per class.", color: "from-emerald-500 to-teal-500", iconBg: "bg-emerald-500" },
-                { num: "3", title: "Go live", desc: "Mark daily attendance. Generate monthly invoices. Send receipts. Parents get the portal link.", color: "from-amber-500 to-orange-500", iconBg: "bg-amber-500" },
-              ].map((step, i) => (
-                <div key={step.num} className="group relative" style={{ animation: `fadeInUp 0.5s ease-out ${i * 0.15}s both` }}>
-                  {/* Number circle */}
-                  <div className={`absolute -top-2 -left-2 w-14 h-14 rounded-2xl bg-gradient-to-br ${step.color} text-white flex items-center justify-center text-xl font-bold shadow-lg shadow-primary/20 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300`}>
-                    {step.num}
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                num: "01",
+                title: "Sign up & pay",
+                desc: "Create your school account. Pick a plan. Pay online or by invoice. Get a school access code.",
+                image: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/64a5592ceab6.jpg", // school building
+              },
+              {
+                num: "02",
+                title: "Invite your staff",
+                desc: "Set up classes, sections, subjects. Invite principal, accountant, teachers. They request access via portal link.",
+                image: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/cd036b27290e.jpg", // principal office
+              },
+              {
+                num: "03",
+                title: "Run your school",
+                desc: "Add students. Mark attendance. Generate invoices. Publish results. Parents see everything in real-time.",
+                image: "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/a998015f121d.jpeg", // playground
+              },
+            ].map((step, i) => (
+              <ScrollReveal key={step.num} delay={i * 0.1}>
+                <div
+                  style={{
+                    background: "var(--zb-bg)",
+                    borderRadius: "20px",
+                    border: "1px solid var(--zb-border)",
+                    height: "100%",
+                    overflow: "hidden",
+                  }}
+                >
+                  {/* Image header */}
+                  <div style={{ position: "relative", height: "180px", overflow: "hidden" }}>
+                    <ParallaxImage
+                      src={step.image}
+                      alt={step.title}
+                      className="w-full h-full"
+                      speed={0.1}
+                      scale={1.1}
+                    />
+                    <div
+                      aria-hidden
+                      style={{
+                        position: "absolute",
+                        inset: 0,
+                        background:
+                          "linear-gradient(180deg, transparent 0%, rgba(253, 253, 251, 0.9) 100%)",
+                        pointerEvents: "none",
+                      }}
+                    />
+                    {/* Step number floating over image */}
+                    <div
+                      className="zb-headline"
+                      style={{
+                        position: "absolute",
+                        bottom: "12px",
+                        left: "20px",
+                        fontSize: "48px",
+                        color: "var(--zb-green)",
+                        opacity: 0.85,
+                        lineHeight: 1,
+                        textShadow: "0 4px 20px rgba(253, 253, 251, 0.6)",
+                      }}
+                    >
+                      {step.num}
+                    </div>
                   </div>
-                  <Card className="pt-16 pl-6 pr-6 pb-6 group-hover:border-primary/30 group-hover:shadow-lg transition-all duration-300 h-full">
-                    <h3 className="font-semibold text-lg mb-2 group-hover:text-primary transition-colors">{step.title}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{step.desc}</p>
-                  </Card>
+                  {/* Body */}
+                  <div style={{ padding: "28px" }}>
+                    <h3
+                      className="zb-headline mb-3"
+                      style={{ fontSize: "24px" }}
+                    >
+                      {step.title}
+                    </h3>
+                    <p className="zb-body" style={{ fontSize: "15px" }}>
+                      {step.desc}
+                    </p>
+                  </div>
                 </div>
-              ))}
-            </div>
+              </ScrollReveal>
+            ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* ═══ TESTIMONIALS ═══ */}
-        <section className="py-24 lg:py-32 bg-gradient-to-b from-card via-background to-card relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
-          <div className="max-w-7xl mx-auto px-6 lg:px-8 relative">
-            <div className="text-center max-w-2xl mx-auto mb-16">
-              <Badge variant="outline" className="mb-4 px-4 py-1.5 bg-amber-500/5 border-amber-500/20">
-                <Star className="h-3.5 w-3.5 mr-1.5 text-amber-500 fill-amber-500" />
-                <span className="font-semibold">Testimonials</span>
-              </Badge>
-              <h2 className="text-4xl lg:text-5xl font-bold tracking-tight">Schools love SchoolSaaS</h2>
+      {/* ════════════════════════════════════════════
+          TESTIMONIALS
+         ════════════════════════════════════════════ */}
+      <section style={{ backgroundColor: "var(--zb-bg)" }}>
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-32">
+          <ScrollReveal>
+            <div className="max-w-3xl mb-20">
+              <div className="zb-section-number mb-4">— THE PROOF</div>
+              <h2
+                className="zb-headline"
+                style={{ fontSize: "clamp(40px, 5vw, 64px)" }}
+              >
+                What people say
+                <br />
+                afterwards.
+              </h2>
             </div>
+          </ScrollReveal>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {testimonials.map((t, i) => (
-                <div key={t.name} style={{ animation: `fadeInUp 0.5s ease-out ${i * 0.1}s both` }}>
-                  <Card className="group hover:shadow-xl hover:-translate-y-1 transition-all duration-300 h-full relative overflow-hidden">
-                    {/* Gradient top strip */}
-                    <div className={`absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r ${t.color}`} />
-                    <CardContent className="pt-6">
-                      <Quote className="h-10 w-10 text-primary/20 mb-3" />
-                      <p className="text-foreground leading-relaxed mb-6 text-sm">&ldquo;{t.quote}&rdquo;</p>
-                      {/* Stars */}
-                      <div className="flex items-center gap-1 mb-4">
-                        {Array.from({ length: t.rating }).map((_, j) => (
-                          <Star key={j} className="h-4 w-4 fill-amber-500 text-amber-500 group-hover:scale-110 transition-transform" style={{ transitionDelay: `${j * 50}ms` }} />
-                        ))}
+          <div className="grid md:grid-cols-3 gap-6">
+            {TESTIMONIALS.map((t, i) => (
+              <ScrollReveal key={i} delay={i * 0.1}>
+                <TiltCard max={3} scale={1.01}>
+                  <div
+                    style={{
+                      padding: "32px",
+                      borderRadius: "20px",
+                      background: "var(--zb-cream)",
+                      border: "1px solid var(--zb-border)",
+                      height: "100%",
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontSize: "60px",
+                        lineHeight: 0.7,
+                        color: "var(--zb-green)",
+                        marginBottom: "20px",
+                        fontFamily: "var(--font-display)",
+                        fontWeight: 700,
+                      }}
+                    >
+                      &ldquo;
+                    </div>
+                    <p
+                      style={{
+                        fontFamily: "var(--font-body)",
+                        fontSize: "17px",
+                        lineHeight: 1.55,
+                        color: "var(--zb-text-dark)",
+                        marginBottom: "24px",
+                      }}
+                    >
+                      {t.quote}
+                    </p>
+                    <div className="pt-4 border-t" style={{ borderColor: "var(--zb-border)" }}>
+                      <div
+                        style={{
+                          fontFamily: "var(--font-display)",
+                          fontWeight: 600,
+                          fontSize: "15px",
+                          color: "var(--zb-text-dark)",
+                        }}
+                      >
+                        {t.name}
                       </div>
-                      {/* Avatar */}
-                      <div className="flex items-center gap-3 pt-3 border-t">
-                        <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${t.color} flex items-center justify-center font-bold text-white group-hover:scale-110 transition-transform`}>
-                          {t.name.charAt(0)}
-                        </div>
-                        <div>
-                          <div className="font-semibold text-sm">{t.name}</div>
-                          <div className="text-xs text-muted-foreground">{t.role}</div>
-                        </div>
+                      <div
+                        className="zb-eyebrow mt-1"
+                      >
+                        {t.role}
                       </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              ))}
-            </div>
+                    </div>
+                  </div>
+                </TiltCard>
+              </ScrollReveal>
+            ))}
           </div>
-          <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
-        </section>
+        </div>
+      </section>
 
-        {/* ═══ FINAL CTA ═══ */}
-        <section className="py-24 lg:py-32">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#0064C8] via-[#0A56A8] to-[#1e3a8a] text-white p-12 lg:p-20 shadow-2xl shadow-primary/20">
-              {/* Decorative 3-bar logo */}
-              <div className="absolute top-8 right-8 opacity-15">
-                <EmersonMark size={250} />
+      {/* ════════════════════════════════════════════
+          FINAL CTA
+         ════════════════════════════════════════════ */}
+      <section
+        className="relative overflow-hidden"
+        style={{ backgroundColor: "var(--zb-ink)" }}
+      >
+        {/* Background image with dark overlay */}
+        <div
+          aria-hidden
+          style={{
+            position: "absolute",
+            inset: 0,
+            backgroundImage:
+              "url('https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/ca14c1bb7785.jpg')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundAttachment: "fixed",
+            opacity: 0.12,
+            filter: "saturate(0.4)",
+          }}
+        />
+        {/* Amber glow blob */}
+        <div
+          aria-hidden
+          className="zb-anim-blob"
+          style={{
+            position: "absolute",
+            top: "-100px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            width: "800px",
+            height: "400px",
+            borderRadius: "50%",
+            background:
+              "radial-gradient(ellipse, rgba(245, 168, 0, 0.18) 0%, transparent 70%)",
+            filter: "blur(60px)",
+            pointerEvents: "none",
+          }}
+        />
+        {/* Blue glow blob */}
+        <div
+          aria-hidden
+          className="zb-anim-blob"
+          style={{
+            position: "absolute",
+            bottom: "-200px",
+            right: "-100px",
+            width: "500px",
+            height: "500px",
+            borderRadius: "50%",
+            background:
+              "radial-gradient(circle, rgba(0, 100, 200, 0.22) 0%, transparent 70%)",
+            filter: "blur(80px)",
+            animationDelay: "4s",
+            pointerEvents: "none",
+          }}
+        />
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-32 relative">
+          <ScrollReveal>
+            <div className="text-center max-w-3xl mx-auto">
+              <div
+                className="zb-eyebrow mb-6"
+                style={{ color: "var(--zb-mint)" }}
+              >
+                Start today
               </div>
-              {/* Animated blobs */}
-              <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-400/20 rounded-full blur-3xl animate-pulse" style={{ animationDuration: "4s" }} />
-              <div className="absolute bottom-0 left-0 w-96 h-96 bg-amber-400/10 rounded-full blur-3xl animate-pulse" style={{ animationDuration: "5s", animationDelay: "1s" }} />
-
-              <div className="relative max-w-2xl">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs font-semibold mb-6">
-                  <Bell className="h-3.5 w-3.5" />
-                  Limited Time Offer
-                </div>
-                <h2 className="text-4xl lg:text-5xl font-bold tracking-tight">
-                  Ready to digitize your school?
-                </h2>
-                <p className="mt-4 text-lg lg:text-xl opacity-90">
-                  Join 500+ schools already managing on SchoolSaaS. Start with a
-                  30-day free trial — no credit card, no setup fee, cancel anytime.
-                </p>
-                <div className="mt-10 flex flex-col sm:flex-row gap-4">
-                  <Link href="/pricing" className="group">
-                    <Button size="lg" variant="secondary" className="text-base font-semibold px-8 h-14 group-hover:scale-105 transition-transform shadow-lg">
-                      Get Started Free
-                      <ArrowRight className="h-5 w-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                    </Button>
-                  </Link>
-                  <Link href="/contact">
-                    <Button size="lg" variant="outline" className="text-base px-8 h-14 bg-transparent border-white/30 text-white hover:bg-white/10 hover:text-white hover:border-white/50 transition-all">
-                      Book a Demo
-                    </Button>
-                  </Link>
-                </div>
+              <h2
+                className="zb-headline-on-dark"
+                style={{ fontSize: "clamp(48px, 6vw, 80px)" }}
+              >
+                Your school,
+                <br />
+                but better.
+              </h2>
+              <p
+                className="zb-body-on-dark mt-6 mx-auto"
+                style={{ maxWidth: "500px" }}
+              >
+                30-day free trial. No credit card. We migrate your data, train
+                your staff, and you go live in a week.
+              </p>
+              <div className="flex flex-wrap gap-3 justify-center mt-10">
+                <Link
+                  href="/pricing"
+                  className="zb-btn-green inline-flex items-center gap-2"
+                >
+                  Start free trial
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link
+                  href="/contact"
+                  className="zb-btn-outline-on-dark inline-flex items-center gap-2"
+                >
+                  Book a demo
+                </Link>
               </div>
             </div>
-          </div>
-        </section>
-      </main>
+          </ScrollReveal>
+        </div>
+      </section>
 
       <SiteFooter />
     </div>
